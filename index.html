@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body id="app">
+    <div data-bind="if: identity.user()">
+        <h1 data-bind="text: identity.user()"></h1>
+        <button type="button" data-bind="click: identity.logout">Esci</button>
+        <nav>
+            <ul data-bind="foreach: menu">
+                <li data-bind="click: $parent.changePage, text: $data"></li>
+            </ul>
+            <div data-bind="component: currentComponent">
+
+            </div>
+        </nav>
+    </div>
+    <div data-bind="if: !identity.user()">
+        <login></login>
+    </div>
+    <script src="vendor/require.js"></script>
+    <script src="index.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,9 @@
+{
+    "browserSync.config" : {
+        "browser" : ["chrome"],
+        "files": ["**/*.html", "**/*.css", "**/*.js"],
+        "proxy": {
+            "target": "http://localhost:8090",
+        }
+    }    
+}
