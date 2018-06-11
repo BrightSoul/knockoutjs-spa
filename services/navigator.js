@@ -3,10 +3,17 @@ define(['vendor/knockout', 'vendor/route', 'services/singleton'], function(ko, r
     var _routes = {};
     var _currentComponent = ko.observable(null);
     var _initialComponent = null;
+    var _navigationStack = ko.observableArray([]);
 
     function Navigator() {
         this.currentComponent = ko.pureComputed(function() {
             return _currentComponent();
+        });
+        this.navigationStack = ko.pureComputed(function() {
+            return _navigationStack();
+        });
+        this.canGoBack = ko.pureComputed(function() {
+            return _navigationStack().length > 1;
         });
         this.route = (function (path, component, parentPath) {
             parentPath = parentPath || getParentPath(path);
@@ -33,7 +40,7 @@ define(['vendor/knockout', 'vendor/route', 'services/singleton'], function(ko, r
             return this;
         }).bind(this);
 
-        this.start = function(initialComponent) {
+        this.start = (function(initialComponent) {
             if (!initialComponent) {
                 console.error("No value provided for the initial component, navigator cannot start.");
                 return;
@@ -41,14 +48,17 @@ define(['vendor/knockout', 'vendor/route', 'services/singleton'], function(ko, r
             _initialComponent = initialComponent;
             //router.base('/');
             router.start(true);
-            navigate(initialComponent);
-        };
+            this.push(initialComponent);
+        }).bind(this);
 
         this.push = function(component, params) {
+            _navigationStack.push(getComponentObject(component, params));
             navigate(component, params);
         };
         this.pop = function() {
-
+            _navigationStack.pop();
+            var frame = _navigationStack()[_navigationStack.length-1];
+            navigate(frame.name, frame.params);
         };
         this.popToRoot = function() {
             navigate(_initialComponent);
@@ -65,7 +75,6 @@ define(['vendor/knockout', 'vendor/route', 'services/singleton'], function(ko, r
         for (var parameter in parameters) {
             path = path.replace(":" + parameter, parameters[parameter]);
         }
-        router(path);
     }
     function getParentPath(path) {
         path = path || '/';
@@ -82,7 +91,11 @@ define(['vendor/knockout', 'vendor/route', 'services/singleton'], function(ko, r
 
     function setCurrentComponent(component, params) {
         params = params || {};
-        _currentComponent({name: component, params: params});
+        _currentComponent(getComponentObject(component, params));
+    }
+
+    function getComponentObject(component, params) {
+        return {name: component, params: params};
     }
 
     function getNormalizedPath(path) {

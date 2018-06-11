@@ -12,9 +12,11 @@
     <div data-bind="if: identity.user()">
         <h1 data-bind="text: identity.user()"></h1>
         <button type="button" data-bind="click: identity.logout">Esci</button>
-        <div data-bind="component: navigator.currentComponent()">
-
-        </div>
+        <button type="button" data-bind="click: navigator.pop, visible: navigator.canGoBack()">Back</button>
+        <div data-bind="text: navigator.navigationStack().length"></div>
+        <ul data-bind="foreach: navigator.navigationStack()">
+            <li data-bind="component: $data"></li>
+        </ul>
     </div>
     <div data-bind="if: !identity.user()">
         <login></login>
