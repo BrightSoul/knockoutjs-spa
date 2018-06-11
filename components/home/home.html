@@ -1,9 +1,7 @@
 <h1>Home</h1>
-<fieldset>
-    <legend>Navigation stack</legend>
-    <ul data-bind="foreach:viewModels">
-        <li data-bind="component: $data"></li>
-    </ul>
-</fieldset>
+<input type="text" data-bind="value: state" />
+<button type="button" data-bind="click: navigateToCustomers">Clienti</button>
+<button type="button" data-bind="click: navigateToStatus">Status</button>
+
 <widget1></widget1>
 <widget2></widget2>

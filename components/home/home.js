@@ -1,6 +1,13 @@
-define(['vendor/knockout'], function(ko) {
+define(['vendor/knockout', 'services/navigator'], function(ko, navigator) {
 
     return function HomeViewModel() {
-        this.viewModels = ko.observable(['page']);
+        this.state = ko.observable(null);
+
+        this.navigateToCustomers = function() {
+            navigator.push('customerList');
+        };
+        this.navigateToStatus = function() {
+            navigator.push('status');
+        }
     };
 });
