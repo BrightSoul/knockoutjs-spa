@@ -52,29 +52,59 @@ define(['vendor/knockout', 'vendor/route', 'services/singleton'], function(ko, r
         }).bind(this);
 
         this.push = function(component, params) {
-            _navigationStack.push(getComponentObject(component, params));
-            navigate(component, params);
+            var componentObject = getComponentObject(component, params);
+            navigate(componentObject);
         };
-        this.pop = function() {
-            _navigationStack.pop();
-            var frame = _navigationStack()[_navigationStack.length-1];
-            navigate(frame.name, frame.params);
-        };
+        this.pop = (function() {
+            if (!this.canGoBack()) {
+                console.warn("Cannot go back");
+                return;
+            }
+            history.back();
+        }).bind(this);
         this.popToRoot = function() {
-            navigate(_initialComponent);
+            if (!this.canGoBack()) {
+                console.warn("Cannot pop to root");
+                return;
+            }
+            history.go(-(_navigationStack().length-1));
         };
     }
     return singleton.create(Navigator);
 
-    function navigate(component, parameters) {
-        if (!(component in _routes)) {
-            console.error("Component '" + component + "' not found in routes");
+    function addComponentToStack(component, params) {
+        var identifier = document.title;
+        console.log(identifier);
+        var componentObject = getComponentObject(component, stack, identifier);
+        var stack = _navigationStack();
+        var title = document.title;
+        var currentIdentifier = parseInt(identifier, 10);
+        var latestIdentifier = stack.length > 0 ? parseInt(stack[stack.length-1].identifier, 10) : 0;
+        if (currentIdentifier > latestIdentifier) {
+            //Clicked forward
+            _navigationStack.push(componentObject);
+        } else {
+            //Clicked backward
+            for (var i = stack.length-1; i >= 0; i--) {
+                if (stack[i].identifier != title) {
+                    if (i > 0) {
+                        _navigationStack.pop();
+                    }
+                    break;
+                }
+            }
         }
-        var path = _routes[component].path;
-        parameters = parameters || {};
+    }
+    function navigate(componentObject) {
+        if (!(componentObject.name in _routes)) {
+            console.error("Component '" + componentObject.name + "' not found in routes");
+        }
+        var path = _routes[componentObject.name].path;
+        var parameters = componentObject.parameters || {};
         for (var parameter in parameters) {
             path = path.replace(":" + parameter, parameters[parameter]);
         }
+        router(path, componentObject.identifier);
     }
     function getParentPath(path) {
         path = path || '/';
@@ -94,8 +124,9 @@ define(['vendor/knockout', 'vendor/route', 'services/singleton'], function(ko, r
         _currentComponent(getComponentObject(component, params));
     }
 
-    function getComponentObject(component, params) {
-        return {name: component, params: params};
+    function getComponentObject(component, params, identifier) {
+        identifier = identifier || (new Date()).getTime().toString()
+        return {name: component, params: params, identifier: identifier };
     }
 
     function getNormalizedPath(path) {
@@ -121,6 +152,7 @@ define(['vendor/knockout', 'vendor/route', 'services/singleton'], function(ko, r
                 }
             }
             setCurrentComponent(component, params);
+            addComponentToStack(component, params);
         };
     }
 
