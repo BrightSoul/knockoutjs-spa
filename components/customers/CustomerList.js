@@ -1,4 +1,4 @@
-define(['vendor/knockout', 'vendor/route'], function(ko, route) {
+define(['vendor/knockout', 'services/navigator'], function(ko, navigator) {
 
     return function CustomerListViewModel(params) {
         this.title = "Customers";
@@ -9,10 +9,11 @@ define(['vendor/knockout', 'vendor/route'], function(ko, route) {
         ];
         
         this.selectCustomer = function(customer) {
-            if (customer != this.selectedCustomer()) {
+            navigator.push('customerDetail', {id: customer.id});
+            /*if (customer != this.selectedCustomer()) {
                 this.selectedCustomer(customer);
                 route("customers/" + customer.id);
-            }
+            }*/
         }.bind(this);
 
         this.selectedCustomer = ko.observable(null);
