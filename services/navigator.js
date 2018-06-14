@@ -79,9 +79,14 @@ define(['vendor/knockout', 'vendor/route', 'services/singleton'], function(ko, r
             _navigationStack.push(componentObject);
         } else {
             //Clicked backward
-            //TODO: pending delete
-            for (var i = _navigationStack().length-1; i > index; i--) {
-                _navigationStack.pop();
+            var stack = _navigationStack();
+            for (var i = stack.length-1; i > index; i--) {
+                if (i == stack.length-1) {
+                    stack[i].pendingDelete(true);
+                    setTimeout(function() { _navigationStack.pop(); }, 1000);
+                } else {
+                    _navigationStack.remove(stack[i]);
+                }
             }
         }
     }
@@ -132,7 +137,7 @@ define(['vendor/knockout', 'vendor/route', 'services/singleton'], function(ko, r
     }
 
     function getComponentObject(component, params) {
-        return {name: component, params: params };
+        return {name: component, params: params, pendingDelete: ko.observable(false) };
     }
 
     function getNormalizedPath(path) {

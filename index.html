@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <style>
+        .pendingDelete {background-color:red;}
+    </style>
 </head>
 
 <body id="app">
@@ -15,7 +18,7 @@
         <button type="button" data-bind="click: navigator.pop, visible: navigator.canGoBack()">Back</button>
         <div data-bind="text: navigator.navigationStack().length"></div>
         <ul data-bind="foreach: navigator.navigationStack()">
-            <li data-bind="component: $data"></li>
+            <li data-bind="component: $data, css: {pendingDelete: $data.pendingDelete()}"></li>
         </ul>
     </div>
     <div data-bind="if: !identity.user()">
