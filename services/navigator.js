@@ -4,6 +4,9 @@ define(['vendor/knockout', 'vendor/route', 'services/singleton'], function(ko, r
     var _currentComponent = ko.observable(null);
     var _initialComponent = null;
     var _navigationStack = ko.observableArray([]);
+    var _404 = null;
+    var _pendingDelete = ko.observable(false);
+    var _canGoBack = ko.observable(false);
 
     function Navigator() {
         this.currentComponent = ko.pureComputed(function() {
@@ -13,9 +16,9 @@ define(['vendor/knockout', 'vendor/route', 'services/singleton'], function(ko, r
             return _navigationStack();
         });
         this.canGoBack = ko.pureComputed(function() {
-            return _navigationStack().length > 1;
+            return _navigationStack().length > 1 && !_pendingDelete();
         });
-        this.route = (function (path, component, parentPath) {
+        this.route = function (path, component, parentPath) {
             parentPath = parentPath || getParentPath(path);
             var normalizedPath = getNormalizedPath(path);
             if (component in _routes) {
@@ -30,15 +33,18 @@ define(['vendor/knockout', 'vendor/route', 'services/singleton'], function(ko, r
             };
             router(normalizedPath.path, getRouteCallback(component, normalizedPath.parameterNames));
             return this;
-        }).bind(this);
+        }.bind(this);
 
-        this.route404 = (function (component) {
+        this.route404 = function (component) {
+            _404 = component;
+            this.route(component, component);
             router('/..', function() {
-                console.warn("Route not found");
-                setCurrentComponent(component);
-            });
+                var url = window.location.pathname + window.location.hash;
+                console.warn("Route '" + url + "' not found");
+                manageStack(component, { url: url });
+            }.bind(this));
             return this;
-        }).bind(this);
+        }.bind(this);
 
         this.start = (function(initialComponent) {
             if (!initialComponent) {
@@ -51,17 +57,17 @@ define(['vendor/knockout', 'vendor/route', 'services/singleton'], function(ko, r
             this.push(initialComponent);
         }).bind(this);
 
-        this.push = function(component, params) {
+        this.push = function(component, params, substack, replace) {
             var componentObject = getComponentObject(component, params);
-            navigate(componentObject);
+            navigate(componentObject, substack, replace);
         };
-        this.pop = (function() {
+        this.pop = function() {
             if (!this.canGoBack()) {
                 console.warn("Cannot go back");
                 return;
             }
             history.back();
-        }).bind(this);
+        }.bind(this);
         this.popToRoot = function() {
             if (!this.canGoBack()) {
                 console.warn("Cannot pop to root");
@@ -82,8 +88,12 @@ define(['vendor/knockout', 'vendor/route', 'services/singleton'], function(ko, r
             var stack = _navigationStack();
             for (var i = stack.length-1; i > index; i--) {
                 if (i == stack.length-1) {
+                    _pendingDelete(true);
                     stack[i].pendingDelete(true);
-                    setTimeout(function() { _navigationStack.pop(); }, 1000);
+                    setTimeout(function() { 
+                        _navigationStack.pop();
+                        _pendingDelete(false);
+                    }, 1000);
                 } else {
                     _navigationStack.remove(stack[i]);
                 }
@@ -107,16 +117,19 @@ define(['vendor/knockout', 'vendor/route', 'services/singleton'], function(ko, r
         return index;
     }
 
-    function navigate(componentObject) {
-        if (!(componentObject.name in _routes)) {
-            console.error("Component '" + componentObject.name + "' not found in routes");
+    function navigate(componentObject, substack, replace) {
+        var path;
+        if (componentObject.name in _routes) {
+            path = _routes[componentObject.name].path;
+            var parameters = componentObject.params || {};
+            for (var parameter in parameters) {
+                path = path.replace(":" + parameter, parameters[parameter]);
+            }
+        } else {
+            console.warn("Component '" + componentObject.name + "' not found in routes");
+            path = componentObject.name;
         }
-        var path = _routes[componentObject.name].path;
-        var parameters = componentObject.params || {};
-        for (var parameter in parameters) {
-            path = path.replace(":" + parameter, parameters[parameter]);
-        }
-        router(path);
+        router(path, path, replace);
     }
     function getParentPath(path) {
         path = path || '/';
