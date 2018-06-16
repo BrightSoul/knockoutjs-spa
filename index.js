@@ -24,7 +24,7 @@ require(['vendor/knockout', 'services/identity', 'services/navigator'], function
         for (var mapping in routes.mappings) {
             nav = nav.route(mapping, routes.mappings[mapping]);
         }
-        nav.route404(routes.notFound).start(routes.start);
+        nav.route404(routes.notFound).start();
     }
 
     function bindViewModel() {

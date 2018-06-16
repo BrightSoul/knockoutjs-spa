@@ -2,11 +2,9 @@ define(['vendor/knockout', 'vendor/route', 'services/singleton'], function(ko, r
     
     var _routes = {};
     var _currentComponent = ko.observable(null);
-    var _initialComponent = null;
     var _navigationStack = ko.observableArray([]);
-    var _404 = null;
     var _pendingDelete = ko.observable(false);
-    var _canGoBack = ko.observable(false);
+    var _autoNavigation = [];
 
     function Navigator() {
         this.currentComponent = ko.pureComputed(function() {
@@ -19,7 +17,6 @@ define(['vendor/knockout', 'vendor/route', 'services/singleton'], function(ko, r
             return _navigationStack().length > 1 && !_pendingDelete();
         });
         this.route = function (path, component, parentPath) {
-            parentPath = parentPath || getParentPath(path);
             var normalizedPath = getNormalizedPath(path);
             if (component in _routes) {
                 console.error("Component '" + component + "' has already been added");
@@ -28,15 +25,13 @@ define(['vendor/knockout', 'vendor/route', 'services/singleton'], function(ko, r
             _routes[component] = {
                 path: path,
                 normalizedPath: normalizedPath.path,
-                parameterNames: normalizedPath.parameterNames,
-                parentPath: parentPath
+                parameterNames: normalizedPath.parameterNames
             };
             router(normalizedPath.path, getRouteCallback(component, normalizedPath.parameterNames));
             return this;
         }.bind(this);
 
         this.route404 = function (component) {
-            _404 = component;
             this.route(component, component);
             router('/..', function() {
                 var url = window.location.pathname + window.location.hash;
@@ -46,15 +41,8 @@ define(['vendor/knockout', 'vendor/route', 'services/singleton'], function(ko, r
             return this;
         }.bind(this);
 
-        this.start = (function(initialComponent) {
-            if (!initialComponent) {
-                console.error("No value provided for the initial component, navigator cannot start.");
-                return;
-            }
-            _initialComponent = initialComponent;
-            //router.base('/');
+        this.start = (function() {
             router.start(true);
-            this.push(initialComponent);
         }).bind(this);
 
         this.push = function(component, params, substack, replace) {
@@ -63,18 +51,18 @@ define(['vendor/knockout', 'vendor/route', 'services/singleton'], function(ko, r
         };
         this.pop = function() {
             if (!this.canGoBack()) {
-                console.warn("Cannot go back");
+                console.warn("Cannot go back now");
                 return;
             }
             history.back();
         }.bind(this);
         this.popToRoot = function() {
             if (!this.canGoBack()) {
-                console.warn("Cannot pop to root");
+                console.warn("Cannot pop to root now");
                 return;
             }
             history.go(-(_navigationStack().length-1));
-        };
+        }.bind(this);
     }
     return singleton.create(Navigator);
 
@@ -82,7 +70,35 @@ define(['vendor/knockout', 'vendor/route', 'services/singleton'], function(ko, r
         var componentObject = getComponentObject(component, params);
         var index = stackIndexOf(componentObject);
         if (index < 0) {
-            _navigationStack.push(componentObject);
+            //If the stack's empty, it might be a deep link request
+            //in that case, we need to re-add previous pages
+            _autoNavigation = [];
+            if (_navigationStack().length == 0) {
+                var componentName = componentObject.name;
+                do {
+                    var path = _routes[componentName].path;
+                    var autoNavigationEntry = {
+                        path: makePath(path, params),
+                        componentName: componentName
+                    };
+                    componentName = getParentComponentName(path);
+                    _autoNavigation.unshift(autoNavigationEntry);
+                    
+                    if (componentName) {
+                        componentObject = getComponentObject(componentName, params);
+                    }
+                } while(componentName);
+            }
+            if (_autoNavigation.length > 1) {
+                //alert(1);
+                var autoNavigationEntry = _autoNavigation.shift();
+                //_navigationStack.push(getComponentObject(autoNavigationEntry.componentName, params));
+                router(autoNavigationEntry.path, autoNavigationEntry.path, true);
+            } else {
+                //Regular push of a component
+                _autoNavigation = [];
+                _navigationStack.push(componentObject);
+            }
         } else {
             //Clicked backward
             var stack = _navigationStack();
@@ -131,19 +147,30 @@ define(['vendor/knockout', 'vendor/route', 'services/singleton'], function(ko, r
         }
         router(path, path, replace);
     }
-    function getParentPath(path) {
+
+    function getParentComponentName(path) {
         path = path || '/';
         var parts = path.split('/');
         while(parts.length > 0 && parts[parts.length-1] == "") {
             parts.pop();
         }
+        if (!parts.length) {
+            return null;
+        }
         //Remove last part
         if (parts.length > 0) {
             parts.pop();
         }
-        return parts.join('/') || '/';
+        var parentPath = parts.join('/') || '/';
+        for (var componentName in _routes) {
+            if (_routes[componentName].path == parentPath) {
+                return componentName;
+            }
+        }
+        return null;
     }
 
+    //TODO: remove this?
     function setCurrentComponent(component, params) {
         params = params || {};
         _currentComponent(getComponentObject(component, params));
@@ -167,16 +194,37 @@ define(['vendor/knockout', 'vendor/route', 'services/singleton'], function(ko, r
         };
     }
 
+    function makePath(path, params) {
+        if (!path) {
+            return path;
+        }
+        for (var param in params) {
+            var regex = new RegExp(':' + param + '(?![a-zA-Z0-9])')
+            path = path.replace(regex, params[param]);
+        }
+        return path;
+    }
+
     function getRouteCallback(component, parameterNames) {
         return function () {
+            console.log("in");
             var params = {};
             if (parameterNames) {
                 for (var i = 0; i < parameterNames.length; i++) {
                     params[parameterNames[i]] = arguments[i];
                 }
             }
-            setCurrentComponent(component, params);
-            manageStack(component, params);
+            if (_autoNavigation.length) {
+                _navigationStack.push(getComponentObject(component, params));
+                var autoNavigationEntry = _autoNavigation.shift();
+                setTimeout(function() {
+                    router(autoNavigationEntry.path, autoNavigationEntry.path, false);
+                }, 1);
+            } else {
+                //TODO: togli qui
+                setCurrentComponent(component, params);
+                manageStack(component, params);
+            }
         };
     }
 

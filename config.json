@@ -15,7 +15,6 @@
             "/customers/:id": "customerDetail",
             "/": "home"
         },
-        "notFound": "notfound",
-        "start": "home"
+        "notFound": "notfound"
     }
 }
