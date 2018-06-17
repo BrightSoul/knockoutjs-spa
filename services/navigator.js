@@ -5,6 +5,11 @@ define(['vendor/knockout', 'vendor/route', 'services/singleton'], function(ko, r
     var _navigationStack = ko.observableArray([]);
     var _pendingDelete = ko.observable(false);
     var _autoNavigation = [];
+    var _regexp = { 
+        optionalParameters: new RegExp(':\\?[a-zA-Z0-9]+', 'g'),
+        extraSlashes: new RegExp('\/{2,}', 'g'),
+        finalSlash: new RegExp('\/$', 'g')
+    };
 
     function Navigator() {
         this.currentComponent = ko.pureComputed(function() {
@@ -17,17 +22,14 @@ define(['vendor/knockout', 'vendor/route', 'services/singleton'], function(ko, r
             return _navigationStack().length > 1 && !_pendingDelete();
         });
         this.route = function (path, component, parentPath) {
-            var normalizedPath = getNormalizedPath(path);
+            var normalizedPaths = getNormalizedPaths(path);
             if (component in _routes) {
                 console.error("Component '" + component + "' has already been added");
                 return;
             }
-            _routes[component] = {
-                path: path,
-                normalizedPath: normalizedPath.path,
-                parameterNames: normalizedPath.parameterNames
-            };
-            router(normalizedPath.path, getRouteCallback(component, normalizedPath.parameterNames));
+            for (var i = 0; i < normalizedPaths.length; i++) {
+                registerPath(component, path, normalizedPaths[i]);
+            }
             return this;
         }.bind(this);
 
@@ -65,6 +67,15 @@ define(['vendor/knockout', 'vendor/route', 'services/singleton'], function(ko, r
         }.bind(this);
     }
     return singleton.create(Navigator);
+
+    function registerPath(component, path, normalizedPath) {
+        _routes[component] = {
+            path: path,
+            normalizedPath: normalizedPath.path,
+            parameterDefinitions: normalizedPath.parameterDefinitions
+        };
+        router(normalizedPath.path, getRouteCallback(component, normalizedPath.parameterDefinitions));
+    }
 
     function manageStack(component, params) {
         var componentObject = getComponentObject(component, params);
@@ -137,10 +148,9 @@ define(['vendor/knockout', 'vendor/route', 'services/singleton'], function(ko, r
         var path;
         if (componentObject.name in _routes) {
             path = _routes[componentObject.name].path;
-            var parameters = componentObject.params || {};
-            for (var parameter in parameters) {
-                path = path.replace(":" + parameter, parameters[parameter]);
-            }
+            var params = componentObject.params || {};
+            console.log("path before and after", path, makePath(path, params));
+            path = makePath(path, params);
         } else {
             console.warn("Component '" + componentObject.name + "' not found in routes");
             path = componentObject.name;
@@ -162,6 +172,7 @@ define(['vendor/knockout', 'vendor/route', 'services/singleton'], function(ko, r
             parts.pop();
         }
         var parentPath = parts.join('/') || '/';
+        //TODO: recurse here until you reach /. /component/wah/woh should at least have a parent of /
         for (var componentName in _routes) {
             if (_routes[componentName].path == parentPath) {
                 return componentName;
@@ -180,18 +191,34 @@ define(['vendor/knockout', 'vendor/route', 'services/singleton'], function(ko, r
         return {name: component, params: params, pendingDelete: ko.observable(false) };
     }
 
-    function getNormalizedPath(path) {
-        var regex = /\:[a-zA-Z0-9]+/g;
+    function getNormalizedPaths(path) {
+        var normalizedPaths = [];
+        var regex = /\:\??[a-zA-Z0-9]+/g;
         var matches = path.match(regex);
-        var parameterNames = [];
+        var parameterDefinitions = [];
         if (matches) {
-            parameterNames = matches.map(function(p) { return p.substr(1); });
+            parameterDefinitions = matches.map(function(p) {
+                var isOptional = p.substr(0, 2) == ":?";
+                return {
+                    name: p.substr(isOptional ? 2 : 1),
+                    isOptional: isOptional
+                };
+            });
         }
-        path = path.replace(regex, '*');
-        return {
-            path: path,
-            parameterNames: parameterNames
-        };
+        var isLastParameterOptional;
+        do {
+            normalizedPaths.push({
+                path: path.replace(regex, '*'),
+                parameterDefinitions: parameterDefinitions
+            });
+            isLastParameterOptional = parameterDefinitions.length && parameterDefinitions[parameterDefinitions.length-1].isOptional;
+            if (isLastParameterOptional) {
+                path = path.substr(0, path.lastIndexOf('/'));
+                parameterDefinitions = parameterDefinitions.slice(0, parameterDefinitions.length-1);
+            }
+        } while(isLastParameterOptional);
+
+        return normalizedPaths;
     }
 
     function makePath(path, params) {
@@ -199,19 +226,23 @@ define(['vendor/knockout', 'vendor/route', 'services/singleton'], function(ko, r
             return path;
         }
         for (var param in params) {
-            var regex = new RegExp(':' + param + '(?![a-zA-Z0-9])')
+            var regex = new RegExp(':\??' + param + '(?![a-zA-Z0-9])')
             path = path.replace(regex, params[param]);
         }
-        return path;
+        console.log("mid", path);
+        //Fix path and return
+        return path
+                .replace(_regexp.optionalParameters, '')
+                .replace(_regexp.extraSlashes, '/')
+                .replace(_regexp.finalSlash, '') || '/';
     }
 
-    function getRouteCallback(component, parameterNames) {
+    function getRouteCallback(component, parameterDefinitions) {
         return function () {
-            console.log("in");
             var params = {};
-            if (parameterNames) {
-                for (var i = 0; i < parameterNames.length; i++) {
-                    params[parameterNames[i]] = arguments[i];
+            if (parameterDefinitions) {
+                for (var i = 0; i < parameterDefinitions.length; i++) {
+                    params[parameterDefinitions[i].name] = i < arguments.length ? arguments[i] : null;
                 }
             }
             if (_autoNavigation.length) {
@@ -221,7 +252,7 @@ define(['vendor/knockout', 'vendor/route', 'services/singleton'], function(ko, r
                     router(autoNavigationEntry.path, autoNavigationEntry.path, false);
                 }, 1);
             } else {
-                //TODO: togli qui
+                //TODO: remove this?
                 setCurrentComponent(component, params);
                 manageStack(component, params);
             }

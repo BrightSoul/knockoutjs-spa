@@ -2,6 +2,7 @@
     "components": {
         "customerList": "customers/customerList",
         "customerDetail": "customers/customerDetail",
+        "products": "products/products",
         "home": "home/home",
         "page": "home/widgets/page/page",
         "widget1": "home/widgets/widget1/widget1",
@@ -13,6 +14,7 @@
         "mappings": {
             "/customers": "customerList",
             "/customers/:id": "customerDetail",
+            "/products/:?id/:?tab": "products",
             "/": "home"
         },
         "notFound": "notfound"
