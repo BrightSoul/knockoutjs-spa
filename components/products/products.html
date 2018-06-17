@@ -1,1 +1,10 @@
 <h1>Products</h1>
+<ul data-bind="foreach: products">
+    <li>
+        <button data-bind="click: $parent.selectProduct, text: name"></button>
+    </li>
+</ul>
+
+<div data-bind="with: selectedProduct">
+    <div data-bind="text: name"></div>
+</div>
