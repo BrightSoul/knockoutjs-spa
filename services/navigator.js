@@ -73,8 +73,18 @@ define(['vendor/knockout', 'vendor/route', 'services/singleton'], function(ko, r
                 return;
             }
             if (componentName) {
-                if (!(componentName in _routes)) {
-                    console.warn('Cannot pop to root since the component \'' + componentName + '\' was not found in routes');
+                var replacePath = componentName in _routes ? _routes[componentName].path : componentName;
+                replacePath = makePath(replacePath, params);
+                if (backSteps > 0) {
+                    var autoNavigationEntry = {
+                        path: replacePath,
+                        componentName: componentName,
+                        replace: true
+                    };
+                    _autoNavigation.push(autoNavigationEntry);
+                } else {
+                    _navigationStack.removeAll();
+                    router(replacePath, replacePath, true);
                 }
             }
             if (backSteps > 0) {
@@ -125,7 +135,8 @@ define(['vendor/knockout', 'vendor/route', 'services/singleton'], function(ko, r
                     var path = _routes[componentName].path;
                     var autoNavigationEntry = {
                         path: makePath(path, params),
-                        componentName: componentName
+                        componentName: componentName,
+                        replace: false
                     };
                     componentName = getParentComponentName(path);
                     _autoNavigation.unshift(autoNavigationEntry);
@@ -149,20 +160,26 @@ define(['vendor/knockout', 'vendor/route', 'services/singleton'], function(ko, r
             }
         } else {
             //Clicked backward
-            var stack = _navigationStack();
-            for (var i = stack.length-1; i > index; i--) {
-                if (i == stack.length-1) {
-                    _pendingDelete(true);
-                    stack[i].pendingDelete(true);
-                    setTimeout(function() { 
-                        _navigationStack.pop();
-                        _pendingDelete(false);
-                    }, 1000);
-                } else {
-                    _navigationStack.remove(stack[i]);
+            if (_autoNavigation.length) {
+                _navigationStack.RemoveAll();
+                var autoNavigationEntry = _autoNavigation.shift();
+                router(autoNavigationEntry.path, autoNavigationEntry.path, true);
+            } else {
+                var stack = _navigationStack();
+                for (var i = stack.length-1; i > index; i--) {
+                    if (i == stack.length-1) {
+                        _pendingDelete(true);
+                        stack[i].pendingDelete(true);
+                        setTimeout(function() { 
+                            _navigationStack.pop();
+                            _pendingDelete(false);
+                        }, 1000);
+                    } else {
+                        _navigationStack.remove(stack[i]);
+                    }
                 }
+                notifySubscribers(component, params);
             }
-            notifySubscribers(component, params);
         }
     }
 
@@ -288,11 +305,16 @@ define(['vendor/knockout', 'vendor/route', 'services/singleton'], function(ko, r
                 }
             }
             if (_autoNavigation.length) {
-                _navigationStack.push(getComponentObject(component, params));
                 var autoNavigationEntry = _autoNavigation.shift();
-                setTimeout(function() {
-                    router(autoNavigationEntry.path, autoNavigationEntry.path, false);
-                }, 1);
+                if (autoNavigationEntry.replace) {
+                    _navigationStack.removeAll();
+                    router(autoNavigationEntry.path, autoNavigationEntry.path, true);
+                } else {
+                    _navigationStack.push(getComponentObject(component, params));
+                    setTimeout(function() {
+                        router(autoNavigationEntry.path, autoNavigationEntry.path, false);
+                    }, 1);
+                }
             } else {
                 //TODO: remove this?
                 setCurrentComponent(component, params);
