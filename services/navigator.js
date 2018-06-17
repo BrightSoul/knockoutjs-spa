@@ -121,14 +121,12 @@ define(['vendor/knockout', 'vendor/route', 'services/singleton'], function(ko, r
                 } while(componentName);
             }
             if (_autoNavigation.length > 1) {
-                //alert(1);
                 var autoNavigationEntry = _autoNavigation.shift();
-                //_navigationStack.push(getComponentObject(autoNavigationEntry.componentName, params));
                 router(autoNavigationEntry.path, autoNavigationEntry.path, true);
             } else {
                 //Regular push of a component
                 _autoNavigation = [];
-                //if it's the same component, just don't push, it will handle it
+                //if it's the same component, just don't push, it will handle the update itself
                 if (!stack.length || (componentObject.name != stack[stack.length-1].name)) {
                     _navigationStack.push(componentObject);
                 }
@@ -147,9 +145,9 @@ define(['vendor/knockout', 'vendor/route', 'services/singleton'], function(ko, r
                     }, 1000);
                 } else {
                     _navigationStack.remove(stack[i]);
-                    notifySubscribers(component, params);
                 }
             }
+            notifySubscribers(component, params);
         }
     }
 

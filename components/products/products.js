@@ -18,6 +18,7 @@ define(['vendor/knockout', 'services/navigator'], function(ko, navigator) {
     };
 
     function handleUpdates(componentName, params) {
+        console.log(params);
         if (params.id) {
             this.selectedProduct({name: "Product " + params.id, id: params.id});
         } else {
