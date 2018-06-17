@@ -6,10 +6,12 @@ define(['vendor/knockout', 'vendor/route', 'services/singleton'], function(ko, r
     var _pendingDelete = ko.observable(false);
     var _autoNavigation = [];
     var _subscriptions = [];
+    var _defaultComponent = null;
     var _regexp = { 
         optionalParameters: new RegExp(':\\?[a-zA-Z0-9]+', 'g'),
         extraSlashes: new RegExp('\/{2,}', 'g'),
-        finalSlash: new RegExp('\/$', 'g')
+        finalSlash: new RegExp('\/$', 'g'),
+        defaultRoute: new RegExp('^\\#?\\/?$', 'g') 
     };
 
     function Navigator() {
@@ -38,13 +40,18 @@ define(['vendor/knockout', 'vendor/route', 'services/singleton'], function(ko, r
             this.route(component, component);
             router('/..', function() {
                 var url = window.location.pathname + window.location.hash;
-                console.warn("Route '" + url + "' not found");
-                manageStack(component, { url: url });
+                if (_regexp.defaultRoute.test(url)) {
+                    manageStack(_defaultComponent);
+                } else {
+                    console.warn("Route '" + url + "' not found");
+                    manageStack(component, { url: url });
+                }
             }.bind(this));
             return this;
         }.bind(this);
 
-        this.start = (function() {
+        this.start = (function(defaultComponent) {
+            _defaultComponent = defaultComponent;
             router.start(true);
         }).bind(this);
 
@@ -59,12 +66,20 @@ define(['vendor/knockout', 'vendor/route', 'services/singleton'], function(ko, r
             }
             history.back();
         }.bind(this);
-        this.popToRoot = function() {
-            if (!this.canGoBack()) {
+        this.popToRoot = function(componentName, params) {
+            var backSteps = _navigationStack().length-1;
+            if (backSteps <= 0 && !componentName) {
                 console.warn("Cannot pop to root now");
                 return;
             }
-            history.go(-(_navigationStack().length-1));
+            if (componentName) {
+                if (!(componentName in _routes)) {
+                    console.warn('Cannot pop to root since the component \'' + componentName + '\' was not found in routes');
+                }
+            }
+            if (backSteps > 0) {
+                history.go(-backSteps);
+            }
         }.bind(this);
 
         this.onNavigated = function(callback, componentNameFilter) {

@@ -2,7 +2,11 @@ require(['vendor/knockout', 'services/identity', 'services/navigator'], function
     
     function IndexViewModel() {
         this.identity = identity;
+        this.menu = ['home', 'customerList', 'products', 'status'];
         this.navigator = navigator;
+        this.selectSection = function(section) {
+            navigator.popToRoot(section);
+        }.bind(this);
     }
 
     function loadConfiguration() {
@@ -24,7 +28,7 @@ require(['vendor/knockout', 'services/identity', 'services/navigator'], function
         for (var mapping in routes.mappings) {
             nav = nav.route(mapping, routes.mappings[mapping]);
         }
-        nav.route404(routes.notFound).start();
+        nav.route404(routes.notFound).start(routes.default);
     }
 
     function bindViewModel() {

@@ -18,8 +18,9 @@
             "/customers": "customerList",
             "/customers/:id": "customerDetail",
             "/products/:?id/:?tab": "products",
-            "/": "home"
+            "/home": "home"
         },
-        "notFound": "notfound"
+        "notFound": "notfound",
+        "default": "home"
     }
 }
