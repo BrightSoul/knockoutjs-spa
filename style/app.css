@@ -141,6 +141,33 @@ main {
     box-sizing: border-box;
     padding-top: 2.8em;
 }
+@keyframes page-enter {
+    from { left: 100vw; opacity: 1; }
+    to { left:0; opacity:1 }
+}
 
+@keyframes page-exit {
+    from { left: 0vw; opacity: 1; }
+    to { left:100vw; opacity:1 }
+}
 
-.pendingDelete {background-color:red;}
+#nav-stack li {
+    font-size: 1em;
+    position:absolute;
+    top:0;
+    width: 100vw;
+    height: 100vh;
+    box-sizing:border-box;
+    padding-top: 2.8em;
+    z-index:1;
+    animation-name: page-enter;
+    animation-duration: 0.4s;
+    animation-timing-function: ease-out;
+    animation-fill-mode: forwards;
+    background-color:white;
+    box-shadow: 2px 2px 2px black;
+}
+
+#nav-stack li.pending-delete {
+    animation-name: page-exit;
+}
