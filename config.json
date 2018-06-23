@@ -10,8 +10,9 @@
         "page": "home/widgets/page/page",
         "widget1": "home/widgets/widget1/widget1",
         "widget2": "home/widgets/widget2/widget2",
-        "login": "login/login",
-        "notfound" :  "notfound/notfound"
+        "login": "shared/login/login",
+        "main-menu": "shared/main-menu/main-menu",
+        "not-found" :  "shared/not-found/not-found"
     },
     "routes": {
         "mappings": {
@@ -20,7 +21,7 @@
             "/products/:?id/:?tab": "products",
             "/home": "home"
         },
-        "notFound": "notfound",
+        "notFound": "not-found",
         "default": "home"
     }
 }

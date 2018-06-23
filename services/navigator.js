@@ -18,6 +18,9 @@ define(['vendor/knockout', 'vendor/route', 'services/singleton'], function(ko, r
         this.currentComponent = ko.pureComputed(function() {
             return _currentComponent();
         });
+        this.defaultComponent = ko.pureComputed(function() {
+            return _defaultComponent;
+        });
         this.navigationStack = ko.pureComputed(function() {
             return _navigationStack();
         });

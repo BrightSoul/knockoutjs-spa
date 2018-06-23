@@ -5,30 +5,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-    <style>
-        .pendingDelete {background-color:red;}
-    </style>
+    <title>App</title>
+    <link href="style/fontawesome/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="style/app.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body id="app">
-    <div data-bind="if: identity.user()">
-        <h1 data-bind="text: identity.user()"></h1>
-        <button type="button" data-bind="click: identity.logout">Esci</button>
-        <nav style="background-color:#f5f5f5">
-            <ul data-bind="foreach: menu">
-                <li><button type="button" data-bind="click: $parent.selectSection, text: $data"></button></li>
-            </ul>
-        </nav>
-        <button type="button" data-bind="click: navigator.pop, visible: navigator.canGoBack()">Back</button>
-        <div data-bind="text: navigator.navigationStack().length"></div>
+    <header id="navbar">
+        <button type="button" id="go-back" data-bind="click: goBack"><i class="fa fa-chevron-left"></i></button>
+        <!-- ko if: currentComponent() -->
+        <h1 data-bind="text: currentComponent().name"></h1>
+        <!-- /ko -->
+        <button type="button" id="toggle-menu" data-bind="click: toggleMenu"><i class="fa fa-bars"></i></button>
+    </header>
+    <main>
         <ul data-bind="foreach: navigator.navigationStack()">
-            <li data-bind="component: $data, css: {pendingDelete: $data.pendingDelete()}"></li>
+            <li data-bind="component: $data, css: {'pending-delete': $data.pendingDelete()}"></li>
         </ul>
+    </main>
+    <!-- Overlays -->
+    <nav id="menu" data-bind="css: {'open': menuOpen}">
+        <main-menu></main-menu>
+    </nav>
+    <div id="modal">
+        <!-- TODO -->
     </div>
-    <div data-bind="if: !identity.user()">
+    <div id="login" data-bind="css: {'open': loginOpen}">
         <login></login>
     </div>
+    <div id="overlay" data-bind="click: closeOverlays"></div>
+    <!-- /Overlays -->
+
     <script src="vendor/require.js"></script>
     <script src="index.js"></script>
 </body>

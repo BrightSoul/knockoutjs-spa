@@ -1,12 +1,35 @@
 require(['vendor/knockout', 'services/identity', 'services/navigator'], function (ko, identity, navigator) {
-    
     function IndexViewModel() {
         this.identity = identity;
-        this.menu = ['home', 'customerList', 'products', 'status'];
         this.navigator = navigator;
-        this.selectSection = function(section) {
-            navigator.popToRoot(section);
+        this.menuOpen = ko.observable(false);
+        this.modalOpen = ko.observable(false);
+        this.goBack = function() {
+            if (navigator.canGoBack()) {
+                navigator.pop();
+            } else {
+                navigator.popToRoot(navigator.defaultComponent(), {});
+            }
         }.bind(this);
+
+        this.toggleMenu = function() {
+            this.menuOpen(!this.menuOpen())
+        }.bind(this);
+
+        this.closeOverlays = function() {
+            this.modalOpen(false);
+            this.menuOpen(false);
+        }.bind(this);
+
+        this.loginOpen = ko.pureComputed(function() {
+            this.closeOverlays();
+            return !identity.user();
+        }.bind(this));
+        
+        this.currentComponent = ko.pureComputed(function() {
+            this.closeOverlays();
+            return navigator.currentComponent();
+        }.bind(this));
     }
 
     function loadConfiguration() {
@@ -43,10 +66,4 @@ require(['vendor/knockout', 'services/identity', 'services/navigator'], function
         configureRoutes(config.routes);
         bindViewModel();
     });
- 
-    //Altri router
-    //https://github.com/riot/route
-    //https://github.com/tildeio/router.js
-    //https://github.com/krasimir/navigo
-
 });

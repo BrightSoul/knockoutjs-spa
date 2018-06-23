@@ -1,0 +1,7 @@
+{
+    "include": [
+        "services/**/*",
+        "components/**/*",
+        "index.js"
+    ]
+}
