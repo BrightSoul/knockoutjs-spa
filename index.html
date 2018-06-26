@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>App</title>
-    <link href="style/fontawesome/font-awesome.min.css" rel="stylesheet" type="text/css" />
-    <link href="style/app.css" rel="stylesheet" type="text/css" />
+    <link href="assets/styles/fontawesome/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="assets/styles/app.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body id="app">
@@ -20,7 +20,7 @@
     </header>
     <main>
         <ul id="nav-stack" data-bind="foreach: navigator.navigationStack()">
-            <li data-bind="component: $data, css: {'pending-delete': $data.pendingDelete()}"></li>
+            <li data-bind="component: $data, attr: {'class':'component-' + $data.name}, css: {'pending-delete': $data.pendingDelete()}"></li>
         </ul>
     </main>
     <!-- Overlays -->

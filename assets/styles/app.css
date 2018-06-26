@@ -29,21 +29,7 @@ h1 {
     overflow:hidden;
     display:block;
 }
-button {
-    background-color:transparent;
-    border:0;
-    text-transform: uppercase;
-    cursor:pointer;
-}
-button:active {
-    opacity: 0.5;
-}
-button.inverted {
-    color:#fff;
-}
-button.primary {
-    background-color: orange;
-}
+
 #navbar {
     position:absolute;
     left:0;
@@ -63,6 +49,7 @@ button.primary {
     left:0;
     top:0;
     bottom:0;
+    padding:0;
     width:2em;
     height:2em;
 }
@@ -74,6 +61,7 @@ button.primary {
     bottom:0;
     width:2em;
     height:2em;
+    padding:0;
 }
 #menu {
     font-size:1em;
@@ -170,4 +158,96 @@ main {
 
 #nav-stack li.pending-delete {
     animation-name: page-exit;
+}
+
+/* Inputs */
+button {
+    border: 0;
+    padding: 0.8em 0.2em;
+    width: 100%;
+    display: block;
+    background-color:transparent;
+    border: 1px solid transparent;
+    outline:none;
+    box-sizing: border-box;
+}
+
+button:active {
+    opacity: 0.8;
+}
+
+input, select {
+    margin: 0.5em 0;
+}
+
+.inverted {
+    color:#fff;
+}
+
+input {
+    width:100%;
+    padding: 0.9em 0.3em 0.1em 0.3em;
+    background-color:transparent;
+    border:0;
+    border-bottom:1px solid rgba(0, 0, 0, 0.6);
+    outline:none;
+    display: block;
+    box-sizing: border-box;
+}
+input.inverted {
+    border-color:rgba(255, 255, 255, 0.6);
+}
+
+input:focus {
+    border-bottom-color: #0071fe;
+}
+input.inverted:focus {
+    border-bottom-color: #fff;
+}
+
+button.primary {
+    text-transform: uppercase;
+    background-color: #0071fe;
+    color: #fff;
+}
+
+button.secondary {
+    text-transform: uppercase;
+    background-color: transparent;
+    border-color: rgba(0, 0, 0, 0.6);
+}
+
+input.inverted:focus {
+    border-color:rgba(255, 255, 255, 0.8);
+}
+.field {
+    position:relative;
+}
+.field label {
+    position:absolute;
+    display:block;
+    top:0;
+    left:0;
+    bottom:0;
+    right:0;
+    padding: 0.9em 0.3em 0.1em 0.3em;
+    box-sizing: border-box;
+    color:rgba(0, 0, 0, 0.8);
+    pointer-events: none;
+    text-align: left;
+    font-size: 1em;
+    transition: font-size 0.2s, top 0.2s, color 0.2s;
+}
+.field input:focus+label, .field input:valid+label {
+    font-size:0.7em;
+    top:-1em;
+}
+.field input:focus+label {
+    color: #0071fe;
+}
+.field input.inverted:focus+label {
+    color: #fff;
+}
+.field label.inverted {
+    color:rgba(255, 255, 255, 0.6);
 }
