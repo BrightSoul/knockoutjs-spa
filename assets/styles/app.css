@@ -146,7 +146,7 @@ main {
     to { left:100%; opacity:1 }
 }
 
-#nav-stack li {
+#nav-stack>li {
     font-size: 1em;
     position:absolute;
     top:0;
@@ -160,10 +160,9 @@ main {
     animation-timing-function: ease-out;
     animation-fill-mode: forwards;
     background-color:white;
-    box-shadow: 2px 2px 2px black;
 }
 
-#nav-stack li.pending-delete {
+#nav-stack>li.pending-delete {
     animation-name: page-exit;
 }
 
@@ -175,12 +174,52 @@ button {
     display: block;
     background-color:transparent;
     border: 1px solid transparent;
+    border-radius: 0.2em;
     outline:none;
     box-sizing: border-box;
+    border-bottom: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+    cursor:pointer;
 }
 
+@keyframes ripple {
+    0% {
+      transform: scale(0, 0);
+      opacity: 1;
+    }
+    20% {
+      transform: scale(40, 40);
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      transform: scale(65, 65);
+    }
+}
+
+button:after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, .3);
+    opacity: 0;
+    border-radius: 50%;
+    transform: scale(1, 1) translate(-50%);
+    transform-origin: 50% 50%;
+  }
+  
+  
+  button:focus:not(:active)::after {
+    animation: ripple 0.6s ease-out;
+  }
+
 button:active {
-    opacity: 0.8;
+    top:2px;
+    border-bottom-color: transparent !important;
 }
 
 input, select {
@@ -197,7 +236,7 @@ input, select {
 
 input {
     width:100%;
-    padding: 0.9em 0.3em 0.1em 0.3em;
+    padding: 1.1em 0.3em 0.1em 0.3em;
     background-color:transparent;
     border:0;
     border-bottom:1px solid rgba(0, 0, 0, 0.6);
@@ -219,6 +258,7 @@ input.inverted:focus {
 button.primary {
     text-transform: uppercase;
     background-color: #0071fe;
+    border-bottom-color:#00469c;
     color: #fff;
 }
 
@@ -241,7 +281,7 @@ input.inverted:focus {
     left:0;
     bottom:0;
     right:0;
-    padding: 0.9em 0.3em 0.1em 0.3em;
+    padding: 1.1em 0.3em 0.1em 0.3em;
     box-sizing: border-box;
     color:rgba(0, 0, 0, 0.8);
     pointer-events: none;
