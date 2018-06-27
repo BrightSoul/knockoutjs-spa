@@ -41,7 +41,7 @@ require(['vendor/knockout', 'services/identity', 'services/navigator'], function
             var path = components[component];
             var suffix = "?v=" + Math.random().toString();
             ko.components.register(component, {
-                viewModel: { require: 'components/' + path + suffix },
+                viewModel: { require: 'components/' + path + '.js' + suffix },
                 template: { require: 'vendor/text!components/' + path + '.html' + suffix }
             });
         }
