@@ -6,6 +6,12 @@
 }
 html, body {
     overflow:hidden;
+    width:100%;
+    min-width: 100%;
+    max-width: 100%;
+    height:100%;
+    min-height: 100%;
+    max-height: 100%;
 }
 
 ul {
@@ -34,7 +40,7 @@ h1 {
     position:absolute;
     left:0;
     top:0;
-    width:100vw;
+    width:100%;
     font-size:1.4em;
     height:2em;
     background-color:#ff0000;
@@ -68,11 +74,11 @@ h1 {
     position:absolute;
     top:0;
     opacity:0;
-    height:100vh;
+    height:100%;
     width:12em;
     right:0;
     /*right:-12em;*/
-    max-width:80vw;
+    max-width:80%;
     background-color:blue;
     padding-top:2.8em;
     box-sizing:border-box;
@@ -91,8 +97,8 @@ h1 {
     pointer-events: none;
     top:0;
     left:0;
-    width:100vw;
-    height:100vh;
+    width:100%;
+    height:100%;
     z-index:100;
     transition: background-color 0.5s, backdrop-filter 0.5s, -webkit-backdrop-filter 0.5s;
 }
@@ -106,10 +112,10 @@ h1 {
 
 #login {
     position:absolute;
-    top:-100vh;
+    top:-100%;
     left:0;
-    width:100vw;
-    height:100vh;
+    width:100%;
+    height:100%;
     z-index:1001;
     pointer-events: none;
     transition: top 0.3s ease-out;
@@ -125,27 +131,27 @@ main {
     position:absolute;
     top:0;
     left:0;
-    height:100vh;
-    width:100vw;
+    height:100%;
+    width:100%;
     box-sizing: border-box;
     padding-top: 2.8em;
 }
 @keyframes page-enter {
-    from { left: 100vw; opacity: 1; }
+    from { left: 100%; opacity: 1; }
     to { left:0; opacity:1 }
 }
 
 @keyframes page-exit {
-    from { left: 0vw; opacity: 1; }
-    to { left:100vw; opacity:1 }
+    from { left: 0; opacity: 1; }
+    to { left:100%; opacity:1 }
 }
 
-#nav-stack li {
+#nav-stack>li {
     font-size: 1em;
     position:absolute;
     top:0;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     box-sizing:border-box;
     padding-top: 2.8em;
     z-index:1;
@@ -154,10 +160,9 @@ main {
     animation-timing-function: ease-out;
     animation-fill-mode: forwards;
     background-color:white;
-    box-shadow: 2px 2px 2px black;
 }
 
-#nav-stack li.pending-delete {
+#nav-stack>li.pending-delete {
     animation-name: page-exit;
 }
 
@@ -169,12 +174,52 @@ button {
     display: block;
     background-color:transparent;
     border: 1px solid transparent;
+    border-radius: 0.2em;
     outline:none;
     box-sizing: border-box;
+    border-bottom: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+    cursor:pointer;
 }
 
+@keyframes ripple {
+    0% {
+      transform: scale(0, 0);
+      opacity: 1;
+    }
+    20% {
+      transform: scale(40, 40);
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      transform: scale(65, 65);
+    }
+}
+
+button:after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, .3);
+    opacity: 0;
+    border-radius: 50%;
+    transform: scale(1, 1) translate(-50%);
+    transform-origin: 50% 50%;
+  }
+  
+  
+  button:focus:not(:active)::after {
+    animation: ripple 0.6s ease-out;
+  }
+
 button:active {
-    opacity: 0.8;
+    top:2px;
+    border-bottom-color: transparent !important;
 }
 
 input, select {
@@ -185,9 +230,13 @@ input, select {
     color:#fff;
 }
 
+.scrollable {
+    overflow-y:auto;
+}
+
 input {
     width:100%;
-    padding: 0.9em 0.3em 0.1em 0.3em;
+    padding: 1.1em 0.3em 0.1em 0.3em;
     background-color:transparent;
     border:0;
     border-bottom:1px solid rgba(0, 0, 0, 0.6);
@@ -209,6 +258,7 @@ input.inverted:focus {
 button.primary {
     text-transform: uppercase;
     background-color: #0071fe;
+    border-bottom-color:#00469c;
     color: #fff;
 }
 
@@ -231,7 +281,7 @@ input.inverted:focus {
     left:0;
     bottom:0;
     right:0;
-    padding: 0.9em 0.3em 0.1em 0.3em;
+    padding: 1.1em 0.3em 0.1em 0.3em;
     box-sizing: border-box;
     color:rgba(0, 0, 0, 0.8);
     pointer-events: none;

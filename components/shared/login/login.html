@@ -1,8 +1,8 @@
-<div style="background-color:#8894a3; background-image:url('/assets/images/yun-xi-zheng-bluecloudmountain.jpg'); background-size:cover; background-position: center center; width:100vw; height:100vh; text-align:center;">
+<div class="scrollable" style="background-color:#8894a3; background-image:url('/assets/images/yun-xi-zheng-bluecloudmountain.jpg'); background-size:cover; background-position: center center; width:100vw; height:100vh; text-align:center;">
     <div>
         <img src="/assets/images/logo.svg" style="width:100%; max-width:15em; margin:4em 0;" />
     </div>
-    <form style="width:100%; max-width:300px; margin:auto; padding:10px; box-sizing:border-box;">
+    <form style="width:100%; max-width:18em; margin:auto; padding-bottom:6em; box-sizing:border-box;">
         <div class="field">
             <input class="inverted" type="text" data-bind="value:username" required autocomplete="off" />
             <label class="inverted">Username</label>
@@ -12,10 +12,17 @@
             <label class="inverted">Password</label>
         </div>
         <div>
-            <button type="button" class="primary" data-bind="click: login" style="margin-top:1em">Login</button>
-            <button type="button" class="inverted">Forgot password?</button>
+            <button type="button" class="primary" data-bind="click: login" style="margin-top:1.5em">Login</button>
+            <button type="button" class="inverted" style="margin-top:0.5em">Forgot password?</button>
             <!--<button type="button" class="secondary">Registrati</button>-->
         </div>
     </form>
-    <footer style="position:absolute; bottom:1em; font-size:0.7em; width:100%;" class="inverted">v1.0<br />Background picture 'Blue cloud mointain' by Yun Xi Zheng.</footer>
+    <footer id="login-footer" style="position:absolute; bottom:5em; font-size:0.7em; width:100%;" class="inverted">v1.0<br />Background picture 'Blue cloud mointain' by Yun Xi Zheng.</footer>
 </div>
+<style>
+    @media (max-height: 35em) {
+        #login-footer {
+            display: none;
+        }
+    }
+</style>
