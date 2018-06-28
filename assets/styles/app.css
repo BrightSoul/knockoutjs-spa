@@ -243,6 +243,7 @@ input {
     outline:none;
     display: block;
     box-sizing: border-box;
+    margin-bottom: 1em;
 }
 input.inverted {
     border-color:rgba(255, 255, 255, 0.6);
@@ -273,7 +274,6 @@ input.inverted:focus {
 }
 .field {
     position:relative;
-    padding-bottom: 1em;
 }
 .field label {
     position:absolute;
