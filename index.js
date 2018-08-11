@@ -3,6 +3,8 @@ require(['vendor/knockout', 'services/identity', 'services/navigator'], function
         this.identity = identity;
         this.navigator = navigator;
         this.menuOpen = ko.observable(false);
+        this.actionsOpen = ko.observable(false);
+        this.searchOpen = ko.observable(false);
         this.modalOpen = ko.observable(false);
         this.goBack = function() {
             if (navigator.canGoBack()) {
@@ -13,12 +15,26 @@ require(['vendor/knockout', 'services/identity', 'services/navigator'], function
         }.bind(this);
 
         this.toggleMenu = function() {
-            this.menuOpen(!this.menuOpen())
+            toggleState(this.menuOpen);
+        }.bind(this);
+
+        this.toggleActions = function() {
+            toggleState(this.actionsOpen);
+        }.bind(this);
+
+        this.toggleSearch = function() {
+            toggleState(this.searchOpen);
+        }.bind(this);
+
+        this.toggleModal = function() {
+            toggleState(this.modalOpen);
         }.bind(this);
 
         this.closeOverlays = function() {
             this.modalOpen(false);
             this.menuOpen(false);
+            this.actionsOpen(false);
+            this.searchOpen(false);
         }.bind(this);
 
         this.loginOpen = ko.pureComputed(function() {
@@ -34,6 +50,10 @@ require(['vendor/knockout', 'services/identity', 'services/navigator'], function
 
     function loadConfiguration() {
         return fetch('/config.json');
+    }
+
+    function toggleState(observable) {
+        observable(!observable());
     }
 
     function configureComponents(components) {

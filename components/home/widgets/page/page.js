@@ -1,6 +1,6 @@
 define(['vendor/knockout'], function(ko) {
 
-    return function Page() {
+    return function PageViewModel() {
         
     };
 });

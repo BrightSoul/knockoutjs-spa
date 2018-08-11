@@ -11,8 +11,11 @@
         "widget1": "home/widgets/widget1/widget1",
         "widget2": "home/widgets/widget2/widget2",
         "login": "shared/login/login",
+        "search-box": "shared/search-box/search-box",
         "main-menu": "shared/main-menu/main-menu",
-        "not-found" :  "shared/not-found/not-found"
+        "actions-menu": "shared/actions-menu/actions-menu", 
+        "actions": "shared/actions-menu/actions",
+        "not-found": "shared/not-found/not-found"
     },
     "routes": {
         "mappings": {

@@ -16,15 +16,18 @@
     <meta name="msapplication-TileColor" content="#2F3BA2">
     <link href="/assets/styles/fontawesome/font-awesome.min.css" rel="stylesheet" type="text/css" />
     <link href="/assets/styles/app.css?v=1" rel="stylesheet" type="text/css" />
+    <script src="vendor/require.js"></script>
+    <script src="index.js?v=1"></script>
 </head>
 
 <body id="app">
     <header id="navbar">
-        <button type="button" id="go-back" data-bind="click: goBack"><i class="fa fa-chevron-left"></i></button>
+        <button type="button" id="toggle-menu" data-bind="click: toggleMenu"><i class="fa fa-bars"></i></button>
         <!-- ko if: currentComponent() -->
         <h1 data-bind="text: currentComponent().name"></h1>
         <!-- /ko -->
-        <button type="button" id="toggle-menu" data-bind="click: toggleMenu"><i class="fa fa-bars"></i></button>
+        <button type="button" id="toggle-search" data-bind="click: toggleSearch"><i class="fa fa-search"></i></button>
+        <button type="button" id="toggle-actions" data-bind="click: toggleActions"><i class="fa fa-ellipsis-v"></i></button>
     </header>
     <main>
         <ul id="nav-stack" data-bind="foreach: navigator.navigationStack()">
@@ -32,8 +35,14 @@
         </ul>
     </main>
     <!-- Overlays -->
-    <nav id="menu" data-bind="css: {'open': menuOpen}">
+    <div id="search" data-bind="if: searchOpen, css: {'open': searchOpen}">
+        <search-box params="{ closeCommand: toggleSearch }"></search-box>
+    </div>
+    <nav id="menu" data-bind="if: menuOpen, css: {'open': menuOpen}">
         <main-menu></main-menu>
+    </nav>
+    <nav id="actions" data-bind="css: {'open': actionsOpen}">
+        <actions-menu></actions-menu>
     </nav>
     <div id="modal">
         <!-- TODO -->
@@ -43,9 +52,6 @@
     </div>
     <div id="overlay" data-bind="click: closeOverlays"></div>
     <!-- /Overlays -->
-
-    <script src="vendor/require.js"></script>
-    <script src="index.js?v=1"></script>
 </body>
 
 </html>

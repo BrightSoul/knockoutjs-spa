@@ -1,6 +1,6 @@
 define(['vendor/knockout'], function(ko) {
 
-    return function Widget1() {
+    return function Widget1ViewModel() {
         
     };
 });
