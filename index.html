@@ -24,7 +24,7 @@
     <header id="navbar">
         <button type="button" id="toggle-menu" data-bind="click: toggleMenu"><i class="fa fa-bars"></i></button>
         <!-- ko if: currentComponent() -->
-        <h1 data-bind="text: currentComponent().name"></h1>
+        <page-title-container></page-title-container>
         <!-- /ko -->
         <button type="button" id="toggle-search" data-bind="click: toggleSearch"><i class="fa fa-search"></i></button>
         <button type="button" id="toggle-actions" data-bind="click: toggleActions, css: {'enabled': hasActions}"><i class="fa fa-ellipsis-v"></i></button>

@@ -1,10 +1,11 @@
 define(['vendor/knockout', 'services/bus'], function(ko, bus) {
 
-    return function ActionsMenuViewModel(params) {
-        this.actionTemplate = ko.observable(null);
-        this.hasActions = params.hasActions;
+    var defaultTitle = { data: null, nodes: [] };
+
+    return function PageTitleContainerViewModel(params) {
+        this.title = ko.observable(null);
         
-        var updateSubscription = bus.subscribe('actionsUpdated', onActionsUpdated.bind(this));
+        var updateSubscription = bus.subscribe('titleUpdated', onTitleUpdated.bind(this));
         var navigatingSubscription = bus.subscribe('navigating', onNavigating.bind(this));
 
         this.dispose = function() {
@@ -13,17 +14,15 @@ define(['vendor/knockout', 'services/bus'], function(ko, bus) {
         };
     };
 
-    function onActionsUpdated(message) {
-        this.actionTemplate({
+    function onTitleUpdated(message) {
+        this.title({
             data: message.data,
             nodes: message.nodes
         });
-        this.hasActions(true);
     }
 
     function onNavigating(message) {
-        this.actionTemplate(null);
-        this.hasActions(false);
+        this.title(null);
     }
 
 });

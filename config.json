@@ -15,6 +15,8 @@
         "main-menu": "shared/main-menu/main-menu",
         "actions-menu": "shared/actions-menu/actions-menu", 
         "actions": "shared/actions-menu/actions",
+        "page-title-container": "shared/page-title/page-title-container", 
+        "page-title": "shared/page-title/page-title",
         "not-found": "shared/not-found/not-found"
     },
     "routes": {
