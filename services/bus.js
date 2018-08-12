@@ -37,7 +37,7 @@ define(['vendor/knockout', 'services/singleton'], function(ko, singleton) {
                 console.error("Can't unsubscribe, this subscription did not exist");
                 return;
             }
-            subscriptions.splice(index, 1);
+            subscriptions[subscription.messageName].splice(index, 1);
         }
         this.logout = function() {
             storage.save("user", null);

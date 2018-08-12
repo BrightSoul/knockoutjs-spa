@@ -69,6 +69,12 @@ h1 {
     width:2em;
     height:2em;
     padding:0;
+    opacity: 0.3;
+    pointer-events: none;
+}
+#toggle-actions.enabled {
+    opacity:1;
+    pointer-events: all;
 }
 #toggle-search {
     font-size:1em;

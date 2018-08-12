@@ -4,6 +4,7 @@ require(['vendor/knockout', 'services/identity', 'services/navigator'], function
         this.navigator = navigator;
         this.menuOpen = ko.observable(false);
         this.actionsOpen = ko.observable(false);
+        this.hasActions = ko.observable(false);
         this.searchOpen = ko.observable(false);
         this.modalOpen = ko.observable(false);
         this.goBack = function() {
@@ -97,8 +98,13 @@ require(['vendor/knockout', 'services/identity', 'services/navigator'], function
     }
 
     function bindViewModel() {
+        configureCustomBindings();
         var vm = new IndexViewModel();
         ko.applyBindings(vm);
+    }
+
+    function configureCustomBindings() {
+        //TODO:
     }
 
     loadConfiguration()

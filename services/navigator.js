@@ -136,6 +136,7 @@ define(['vendor/knockout', 'vendor/route', 'services/singleton', 'services/bus']
             } else {
                 //Regular push of a component
                 _autoNavigation = [];
+                notifyNavigating(component, params);
                 //if it's the same component, just don't push, it will handle the update itself
                 if (!stack.length || (componentObject.name != stack[stack.length-1].name)) {
                     _navigationStack.push(componentObject);
@@ -150,6 +151,7 @@ define(['vendor/knockout', 'vendor/route', 'services/singleton', 'services/bus']
                 router(autoNavigationEntry.path, autoNavigationEntry.path, true);
             } else {
                 var stack = _navigationStack();
+                notifyNavigating(component, params);
                 for (var i = stack.length-1; i > index; i--) {
                     if (i == stack.length-1) {
                         _pendingDelete(true);
@@ -214,6 +216,9 @@ define(['vendor/knockout', 'vendor/route', 'services/singleton', 'services/bus']
         return null;
     }
 
+    function notifyNavigating(component, params) {
+        bus.send('navigating', { componentName: component, params: params });
+    }
     function notifyNavigated(component, params) {
         bus.send('navigated', { componentName: component, params: params });
     }

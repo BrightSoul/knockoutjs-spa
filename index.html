@@ -27,7 +27,7 @@
         <h1 data-bind="text: currentComponent().name"></h1>
         <!-- /ko -->
         <button type="button" id="toggle-search" data-bind="click: toggleSearch"><i class="fa fa-search"></i></button>
-        <button type="button" id="toggle-actions" data-bind="click: toggleActions"><i class="fa fa-ellipsis-v"></i></button>
+        <button type="button" id="toggle-actions" data-bind="click: toggleActions, css: {'enabled': hasActions}"><i class="fa fa-ellipsis-v"></i></button>
     </header>
     <main>
         <ul id="nav-stack" data-bind="foreach: navigator.navigationStack()">
@@ -43,7 +43,7 @@
             <main-menu></main-menu>
         </nav>
         <nav id="actions" data-bind="css: {'open': actionsOpen}">
-            <actions-menu></actions-menu>
+            <actions-menu params="{ hasActions: hasActions }"></actions-menu>
         </nav>
         <div id="modal">
             <!-- TODO -->
