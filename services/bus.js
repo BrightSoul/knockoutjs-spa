@@ -10,16 +10,19 @@ define(['vendor/knockout', 'services/singleton'], function(ko, singleton) {
             }
             var subscribers = subscriptions[messageName];
             for (var i = 0; i < subscribers.length; i++) {
-                subscribers[i].callback(message);
+                if ((!subscribers[i].filter) || subscribers[i].filter(message, messageName)) {
+                    subscribers[i].callback(message, messageName);
+                }
             }
         };
-        this.subscribe = function(messageName, callback) {
+        this.subscribe = function(messageName, callback, filter) {
             if (!(messageName in subscriptions)) {
                 subscriptions[messageName] = [];
             }
             var subscription = {
                 messageName: messageName,
-                callback: callback
+                callback: callback,
+                filter: filter
             };
             subscriptions[messageName].push(subscription);
             return subscription;

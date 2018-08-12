@@ -1,11 +1,10 @@
-define(['vendor/knockout', 'vendor/route', 'services/singleton'], function(ko, router, singleton) {
+define(['vendor/knockout', 'vendor/route', 'services/singleton', 'services/bus'], function(ko, router, singleton, bus) {
     
     var _routes = {};
     var _currentComponent = ko.observable(null);
     var _navigationStack = ko.observableArray([]);
     var _pendingDelete = ko.observable(false);
     var _autoNavigation = [];
-    var _subscriptions = [];
     var _defaultComponent = null;
     var _regexp = { 
         optionalParameters: new RegExp(':\\?[a-zA-Z0-9]+', 'g'),
@@ -94,24 +93,6 @@ define(['vendor/knockout', 'vendor/route', 'services/singleton'], function(ko, r
                 history.go(-backSteps);
             }
         }.bind(this);
-
-        this.onNavigated = function(callback, componentNameFilter) {
-            _subscriptions.push({ callback: callback, componentNameFilter: componentNameFilter });
-        }.bind(this);
-        this.offNavigated = function(callback) {
-            var index = -1;
-            for (var i = 0; i < _subscriptions.length; i++) {
-                if (_subscriptions[i].callback == callback) {
-                    index = i;
-                    break;
-                }
-            }
-            if (index < 0) {
-                console.warn('Callback was not found in subscriptions', callback);
-            } else {
-                _subscriptions.splice(index,1);
-            }
-        }.bind(this);
     }
     return singleton.create(Navigator);
 
@@ -159,7 +140,7 @@ define(['vendor/knockout', 'vendor/route', 'services/singleton'], function(ko, r
                 if (!stack.length || (componentObject.name != stack[stack.length-1].name)) {
                     _navigationStack.push(componentObject);
                 }
-                notifySubscribers(component, params);
+                notifyNavigated(component, params);
             }
         } else {
             //Clicked backward
@@ -181,7 +162,7 @@ define(['vendor/knockout', 'vendor/route', 'services/singleton'], function(ko, r
                         _navigationStack.remove(stack[i]);
                     }
                 }
-                notifySubscribers(component, params);
+                notifyNavigated(component, params);
             }
         }
     }
@@ -233,12 +214,8 @@ define(['vendor/knockout', 'vendor/route', 'services/singleton'], function(ko, r
         return null;
     }
 
-    function notifySubscribers(component, params) {
-        for (var i = 0; i < _subscriptions.length; i++) {
-            if ((_subscriptions[i].componentNameFilter || component) == component) {
-                _subscriptions[i].callback(component, params);
-            }
-        }
+    function notifyNavigated(component, params) {
+        bus.send('navigated', { componentName: component, params: params });
     }
 
     //TODO: remove this?
