@@ -4,15 +4,17 @@ define(['vendor/knockout', 'services/navigator'], function(ko, navigator) {
         this.query = ko.observable("");
         this.query.subscribe(performSearch.bind(this));
         this.results = ko.observableArray([]);
-        this.hasFocus = ko.observable(true);
+        this.hasFocus = ko.pureComputed(function() {
+            return params.openObservable();
+        });
         this.closeSearch = function() {
-            this.hasFocus(false);
-            this.query("");
-            params.closeCommand();
+            params.openObservable(false);
         }.bind(this);
+
         this.hasResults = ko.pureComputed(function() {
             return this.results().length > 0;
         }.bind(this));
+
         this.selectResult = function(result) {
             alert("Result selected");
             this.hasFocus(false);

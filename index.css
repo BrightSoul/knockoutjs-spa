@@ -27,7 +27,7 @@ h1 {
     right:0;
     bottom:0;
     text-align:left;
-    line-height:2.1em;
+    line-height:1.9em;
     margin: 0 2em;
     box-sizing: border-box;
     white-space: nowrap;
@@ -89,10 +89,14 @@ h1 {
     height:2em;
     background-color:yellow;
     z-index:1001;
+    pointer-events: none;
+    opacity:0;
+    transition: opacity 0.2s, top 0.3s;
 }
 #search.open {
     top:0;
-    transition:top 0.5s;
+    opacity: 1;
+    pointer-events: all;
 }
 #menu {
     font-size:1em;
@@ -101,37 +105,37 @@ h1 {
     opacity:0;
     height:100%;
     width:12em;
-    right:0;
-    /*right:-12em;*/
+    left:-12em;
     max-width:80%;
     background-color:blue;
     padding-top:2.8em;
     box-sizing:border-box;
-    transition: opacity 0.2s, right 1s;
+    transition: opacity 0.2s, left 0.3s;
     z-index: 101;
+    pointer-events: none;
 }
 #menu.open {
-    /*right:0;*/
+    left:0;
     opacity:1;
-    transition:right 0.5s, opacity 0.2s;
+    pointer-events: all;
 }
 
 #actions {
     position:absolute;
-    top: 2.3em;
+    top: 0em;
     right: 0.3em;
     background-color: #eee;
-    z-index: 1001;
-    display:none;
-    width:8em;
+    z-index: 999;
+    width: 8em;
     font-size: 1.4em;
     opacity: 0;
-    transition: opacity 0.2s;
+    transition: opacity 0.2s, top 0.3s;
+    pointer-events: none;
 }
 #actions.open {
-    display:block;
     opacity: 1;
-
+    top: 2.3em;
+    pointer-events: all;
 }
 
 #overlay {

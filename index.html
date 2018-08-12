@@ -15,12 +15,12 @@
     <meta name="msapplication-TileImage" content="/assets/icons/icon-144x144.png">
     <meta name="msapplication-TileColor" content="#2F3BA2">
     <link href="/assets/styles/fontawesome/font-awesome.min.css" rel="stylesheet" type="text/css" />
-    <link href="/assets/styles/app.css?v=1" rel="stylesheet" type="text/css" />
+    <link href="/index.css?v=1" rel="stylesheet" type="text/css" />
     <script src="vendor/require.js"></script>
     <script src="index.js?v=1"></script>
 </head>
 
-<body id="app">
+<body id="app" data-bind="click: conditionallyCloseOverlays">
     <header id="navbar">
         <button type="button" id="toggle-menu" data-bind="click: toggleMenu"><i class="fa fa-bars"></i></button>
         <!-- ko if: currentComponent() -->
@@ -35,23 +35,25 @@
         </ul>
     </main>
     <!-- Overlays -->
-    <div id="search" data-bind="if: searchOpen, css: {'open': searchOpen}">
-        <search-box params="{ closeCommand: toggleSearch }"></search-box>
+    <div id="overlays">
+        <div id="search" data-bind="css: {'open': searchOpen}">
+            <search-box params="{ openObservable: searchOpen }"></search-box>
+        </div>
+        <nav id="menu" data-bind="if: menuOpen, css: {'open': menuOpen}">
+            <main-menu></main-menu>
+        </nav>
+        <nav id="actions" data-bind="css: {'open': actionsOpen}">
+            <actions-menu></actions-menu>
+        </nav>
+        <div id="modal">
+            <!-- TODO -->
+        </div>
+        <div id="login" data-bind="css: {'open': loginOpen}">
+            <login></login>
+        </div>
+        <div id="overlay" data-bind="click: closeOverlays"></div>
+        <!-- /Overlays -->
     </div>
-    <nav id="menu" data-bind="if: menuOpen, css: {'open': menuOpen}">
-        <main-menu></main-menu>
-    </nav>
-    <nav id="actions" data-bind="css: {'open': actionsOpen}">
-        <actions-menu></actions-menu>
-    </nav>
-    <div id="modal">
-        <!-- TODO -->
-    </div>
-    <div id="login" data-bind="css: {'open': loginOpen}">
-        <login></login>
-    </div>
-    <div id="overlay" data-bind="click: closeOverlays"></div>
-    <!-- /Overlays -->
 </body>
 
 </html>

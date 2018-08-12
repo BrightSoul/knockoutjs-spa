@@ -1,5 +1,5 @@
 <h2>Products</h2>
-<ul data-bind="foreach: products">
+<ul data-bind="foreach: products" class="command-list">
     <li>
         <button data-bind="click: $parent.selectProduct, text: name"></button>
     </li>
@@ -7,7 +7,7 @@
 
 <div data-bind="if: selectedProduct">
     <div data-bind="text: selectedProduct().name"></div>
-    <ul data-bind="foreach: tabs">
+    <ul data-bind="foreach: tabs" class="command-list">
         <li><button data-bind="click: $parent.selectTab, text: $data"></button></li>
     </ul>
     <div data-bind="width: selectedProduct">

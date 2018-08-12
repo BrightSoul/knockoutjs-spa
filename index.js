@@ -15,19 +15,19 @@ require(['vendor/knockout', 'services/identity', 'services/navigator'], function
         }.bind(this);
 
         this.toggleMenu = function() {
-            toggleState(this.menuOpen);
+            toggleState(this.menuOpen, [this.actionsOpen, this.searchOpen]);
         }.bind(this);
 
         this.toggleActions = function() {
-            toggleState(this.actionsOpen);
+            toggleState(this.actionsOpen, [this.menuOpen, this.searchOpen]);
         }.bind(this);
 
         this.toggleSearch = function() {
-            toggleState(this.searchOpen);
+            toggleState(this.searchOpen, [this.menuOpen, this.actionsOpen]);
         }.bind(this);
 
         this.toggleModal = function() {
-            toggleState(this.modalOpen);
+            toggleState(this.modalOpen, [this.menuOpen, this.actionsOpen, this.searchOpen]);
         }.bind(this);
 
         this.closeOverlays = function() {
@@ -35,6 +35,22 @@ require(['vendor/knockout', 'services/identity', 'services/navigator'], function
             this.menuOpen(false);
             this.actionsOpen(false);
             this.searchOpen(false);
+        }.bind(this);
+
+        this.conditionallyCloseOverlays = function(vm, event) {
+            var canClose = true;
+            var element = event.target;
+            while (element) {
+                if (element.id == "navbar" || element.id == "overlays") {
+                    canClose = false;
+                    break;
+                } else {
+                    element = element.parentElement;
+                }
+            }
+            if (canClose) {
+                this.closeOverlays();
+            }
         }.bind(this);
 
         this.loginOpen = ko.pureComputed(function() {
@@ -52,8 +68,13 @@ require(['vendor/knockout', 'services/identity', 'services/navigator'], function
         return fetch('/config.json');
     }
 
-    function toggleState(observable) {
+    function toggleState(observable, closeOthers) {
         observable(!observable());
+        if (closeOthers) {
+            for (var i = 0; i < closeOthers.length; i++) {
+                closeOthers[i](false);
+            }
+        }
     }
 
     function configureComponents(components) {
