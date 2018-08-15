@@ -520,4 +520,8 @@ input.inverted:focus {
         color: #00d3a9;
         text-decoration: underline;
     }
+    #breadcrumbs li:last-child button {
+        color:#888;
+        pointer-events: none;
+    }
 }
