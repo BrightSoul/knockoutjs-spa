@@ -17,6 +17,7 @@
         "actions": "shared/actions-menu/actions",
         "page-title-container": "shared/page-title/page-title-container", 
         "page-title": "shared/page-title/page-title",
+        "breadcrumbs": "shared/breadcrumbs/breadcrumbs",
         "not-found": "shared/not-found/not-found"
     },
     "routes": {

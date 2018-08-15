@@ -1,4 +1,4 @@
-require(['vendor/knockout', 'services/identity', 'services/navigator'], function (ko, identity, navigator) {
+require(['vendor/knockout', 'services/identity', 'services/navigator', 'services/bus'], function (ko, identity, navigator, bus) {
     function IndexViewModel() {
         this.identity = identity;
         this.navigator = navigator;
@@ -36,6 +36,7 @@ require(['vendor/knockout', 'services/identity', 'services/navigator'], function
             this.menuOpen(false);
             this.actionsOpen(false);
             this.searchOpen(false);
+            bus.send('overlaysClosed', {});
         }.bind(this);
 
         this.conditionallyCloseOverlays = function(vm, event) {
