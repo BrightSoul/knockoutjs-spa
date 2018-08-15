@@ -18,6 +18,11 @@ ul {
     list-style-type: none;
 }
 
+hr {
+    border: 0;
+    border-top: 1px solid gray;
+}
+
 h1 {
     font-size:1.4em;
     font-weight:400;
@@ -41,17 +46,19 @@ h1 {
     position:absolute;
     left:0;
     top:0;
-    width:100%;
-    font-size:1.4em;
-    height:2em;
+    right:0;
+    height:2.8em;
     background-color:#ff0000;
     z-index:1000;
+    transition: left 0.3s;
+}
+#navbar>button {
+    font-size:1.4em;
 }
 
 #modal {display:none;}
 
 #toggle-menu {
-    font-size:1em;
     position: absolute;
     left:0;
     top:0;
@@ -62,7 +69,6 @@ h1 {
     line-height: 2.05em;
 }
 #toggle-actions {
-    font-size:1em;
     position:absolute;
     right:0;
     top:0;
@@ -78,7 +84,6 @@ h1 {
     pointer-events: all;
 }
 #toggle-search {
-    font-size:1em;
     position:absolute;
     right:2em;
     top:0;
@@ -134,14 +139,14 @@ h1 {
     background-color: #eee;
     z-index: 999;
     width: 8em;
-    font-size: 1.4em;
     opacity: 0;
     transition: opacity 0.2s, top 0.3s;
+    padding: 0.3em;
     pointer-events: none;
 }
 #actions.open {
     opacity: 1;
-    top: 2.3em;
+    top: 3.1em;
     pointer-events: all;
 }
 
@@ -205,15 +210,17 @@ main {
     font-size: 1em;
     position:absolute;
     top:0;
-    width: 100%;
-    height: 100%;
+    right: 0;
+    bottom: 0;
+    left:0;
     box-sizing:border-box;
     padding-top: 2.8em;
     z-index:1;
-    animation-name: page-enter;
+    transition: top 0.3s, left 0.3s;
+    /*animation-name: page-enter;
     animation-duration: 0.4s;
     animation-timing-function: ease-out;
-    animation-fill-mode: forwards;
+    animation-fill-mode: forwards;*/
     background-color:white;
 }
 
@@ -240,7 +247,7 @@ button {
 
 .command-list button {
     border-left:0 solid blue;
-    padding:0.7em;
+    padding:0.8em;
     width:100%;
     text-align: left;
     transition: border 0.2s;
@@ -373,3 +380,41 @@ input.inverted:focus {
     color:rgba(255, 255, 255, 0.6);
 }
 ::-ms-clear { display:none; }
+
+/* Response stuff with media queries */
+@media screen and (min-width:768px) {
+    #menu {
+        padding-top:0;
+        left:0;
+        opacity:1;
+        pointer-events: all;
+    }
+    #navbar, #nav-stack>li, #actions, #actions.open {
+        left: 12em;
+    }
+    #nav-stack>li {
+        top: 2.8em;
+    }
+    #actions, #actions.open {
+        padding: 0;
+        top: 2.8em;
+        right: 0;
+        pointer-events: all;
+        opacity: 1;
+        width: auto;
+    }
+    #actions ul {
+        float:right;
+    }
+    #actions li {
+        display: inline-block;
+        width: auto;
+    }
+    #toggle-menu, #toggle-actions {
+        display:none;
+    }
+    h1 {
+        margin-left: 0.6em;
+        margin-right: 10em;
+    }
+}
