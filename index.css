@@ -1,5 +1,51 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto:300');
 
+/* Colors */
+#login { background-color:white; }
+#navbar { background-color:#41938c; color:white;}
+#search { background-color: white; color: #888; }
+#search ::placeholder { color:#888; }
+#menu { background-color:#1b4642; }
+hr { border-top-color: gray; }
+#menu hr { border-top-color: rgba(0,0,0,0.1); }
+#content-commands { background-color:rgba(0,0,0,0.05); }
+#navbar>button { color:white; }
+#menu button { color:white; }
+#actions { background-color: #eee; }
+#nav-stack>li { background-color:white; }
+.inverted { color:#fff; }
+input { border-bottom-color:rgba(0, 0, 0, 0.6); }
+input.inverted { border-color:rgba(255, 255, 255, 0.6) !important; }
+input:focus { border-bottom-color: #41938c; }
+input.inverted:focus { border-bottom-color: #fff; }
+button::after { background: rgba(255, 255, 255, .3); }
+button.primary { background-color: #41938c; border-bottom-color:#1b4642; color: #fff; }
+button.secondary { border-color: rgba(0, 0, 0, 0.6); }
+input.inverted:focus { border-color:rgba(255, 255, 255, 0.8); }
+.command-list button { border-left-color:#00d3a9; }
+.command-list button:hover { border-left-color:#00d3a9; }
+#menu .command-list button:hover { background-color:rgba(255, 255, 255, 0.15); }
+.field input:focus+label { color: #41938c; }
+.field input.inverted:focus+label { color: #fff; }
+.field label.inverted { color:rgba(255, 255, 255, 0.6); }
+.field label { color:rgba(0, 0, 0, 0.8); }
+
+@media screen and (min-width:768px) {
+    #search-results { border-left-color: #ccc; }
+    #search { color:rgba(255, 255, 255, 0.4); }
+    #search ::placeholder { color:rgba(255, 255, 255, 0.4); }
+    #search input { color:white; }
+    #actions .command-list button { border-left-color:#ddd; }
+    #breadcrumbs button { color: #00d3a9; }
+    #search { color:rgba(255, 255, 255, 0.4); }
+    #search ::placeholder { color:rgba(255, 255, 255, 0.4); }
+    #search input {  color:white; }
+    #breadcrumbs li:not(:last-child)::after { color: #ccc; }
+    #breadcrumbs button:hover, #breadcrumbs button:hover i { color: #00d3a9; }
+    #breadcrumbs li:last-child button { color:#888; }
+}
+
+
 /* Page layout */
 * { font-size: 1rem;
     font-family: Roboto, Arial, Helvetica, sans-serif;
@@ -22,7 +68,8 @@ ul {
 
 hr {
     border: 0;
-    border-top: 1px solid gray;
+    border-top-width: 1px;
+    border-top-style: solid;
 }
 
 h1 {
@@ -59,14 +106,11 @@ p {
     top:0;
     right:0;
     height:2.8em;
-    background-color:#41938c;
     z-index:1000;
-    color:white;
     transition: left 0.3s;
 }
 #navbar>button {
     font-size:1.4em;
-    color:white;
 }
 
 #modal {display:none;}
@@ -112,15 +156,10 @@ p {
     right:0;
     font-size:1.4em;
     height:2em;
-    background-color: white;
-    color: #888;
     z-index:1001;
     pointer-events: none;
     opacity:0;
     transition: opacity 0.2s, top 0.3s;
-}
-#search ::placeholder {
-    color:#888;
 }
 #search.open {
     top:0;
@@ -140,27 +179,18 @@ p {
     width:12em;
     left:-12em;
     max-width:80%;
-    background-color:#1b4642;
     padding-top:2.8em;
     box-sizing:border-box;
     transition: opacity 0.2s, left 0.3s;
+    box-shadow: 2px 0 2px rgba(0,0,0,0.2);
     z-index: 101;
     pointer-events: none;
-    box-shadow: 2px 0 2px rgba(0,0,0,0.2);
 }
 
 #menu.open {
     left:0;
     opacity:1;
     pointer-events: all;
-}
-
-#menu button {
-    color:white;
-}
-
-#menu hr {
-    border-top-color: rgba(0,0,0,0.1);
 }
 
 #breadcrumbs {
@@ -170,7 +200,6 @@ p {
     position:absolute;
     top: 0em;
     right: 0.3em;
-    background-color: #eee;
     z-index: 999;
     width: 8em;
     opacity: 0;
@@ -207,9 +236,7 @@ p {
 #tenant-command, #profile-command {
     background-color:rgba(255, 255, 255, 0.05);
 }*/
-#content-commands {
-    background-color:rgba(0,0,0,0.05);
-}
+
 
 #login {
     position:absolute;
@@ -220,7 +247,6 @@ p {
     z-index:9001;
     pointer-events: none;
     transition: top 0.3s ease-out;
-    background-color:#ccc;
 }
 
 #login.open {
@@ -262,7 +288,6 @@ main {
     animation-duration: 0.4s;
     animation-timing-function: ease-out;
     animation-fill-mode: forwards;*/
-    background-color:white;
 }
 
 #nav-stack>li.pending-delete {
@@ -286,10 +311,12 @@ button {
     cursor:pointer;
 }
 .command-list {
-    font-size: 0;
+    font-size: 0;    
 }
+
 .command-list button {
-    border-left:0 solid #00d3a9;
+    border-left-width: 0;
+    border-left-style: solid;
     border-right: 0.3em solid transparent;
     padding:0.8em;
     width:100%;
@@ -303,13 +330,11 @@ button {
 }
 
 .command-list button:hover {
-    border-left:0.3em solid #00d3a9 !important;
-    border-right:0 solid transparent !important;
-    background-color:rgba(255, 255, 255, 0.8);
+    border-left-width: 0.3em;
+    border-left-style: solid;
+    border-right: 0 solid transparent !important;
 }
-#menu .command-list button:hover {
-    background-color:rgba(255, 255, 255, 0.15);
-}
+
 
 @keyframes ripple {
     0% {
@@ -326,14 +351,13 @@ button {
     }
 }
 
-button:after {
+button::after {
     content: '';
     position: absolute;
     top: 50%;
     left: 50%;
     width: 5px;
     height: 5px;
-    background: rgba(255, 255, 255, .3);
     opacity: 0;
     border-radius: 50%;
     transform: scale(1, 1) translate(-50%);
@@ -350,10 +374,6 @@ input, select {
     margin: 0.5em 0;
 }
 
-.inverted {
-    color:#fff;
-}
-
 .scrollable {
     overflow-y:auto;
 }
@@ -363,39 +383,23 @@ input {
     padding: 1.1em 0.3em 0.1em 0.3em;
     background-color:transparent;
     border:0;
-    border-bottom:1px solid rgba(0, 0, 0, 0.6);
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
     outline:none;
     display: block;
     box-sizing: border-box;
     margin-bottom: 1em;
 }
-input.inverted {
-    border-color:rgba(255, 255, 255, 0.6);
-}
-
-input:focus {
-    border-bottom-color: #0071fe;
-}
-input.inverted:focus {
-    border-bottom-color: #fff;
-}
 
 button.primary {
     text-transform: uppercase;
-    background-color: #0071fe;
-    border-bottom-color:#00469c;
-    color: #fff;
 }
 
 button.secondary {
     text-transform: uppercase;
     background-color: transparent;
-    border-color: rgba(0, 0, 0, 0.6);
 }
 
-input.inverted:focus {
-    border-color:rgba(255, 255, 255, 0.8);
-}
 .field {
     position:relative;
 }
@@ -408,7 +412,6 @@ input.inverted:focus {
     right:0;
     padding: 1.1em 0.3em 0.1em 0.3em;
     box-sizing: border-box;
-    color:rgba(0, 0, 0, 0.8);
     pointer-events: none;
     text-align: left;
     font-size: 1em;
@@ -418,15 +421,7 @@ input.inverted:focus {
     font-size:0.7em;
     top:-1em;
 }
-.field input:focus+label {
-    color: #0071fe;
-}
-.field input.inverted:focus+label {
-    color: #fff;
-}
-.field label.inverted {
-    color:rgba(255, 255, 255, 0.6);
-}
+
 ::-ms-clear { display:none; }
 
 /* Response stuff with media queries */
@@ -474,23 +469,20 @@ input.inverted:focus {
         left:auto;
         background-color:rgba(0, 0, 0, 0.1);
     }
+    #search-results {
+         border-left-width: 1px;
+         border-left-style: solid;
+    }
+
+    #actions .command-list button {
+        border-left-width:0.05em;
+        border-left-style: solid;
+        border-right:0.25em solid transparent;
+    }
     #close-search-box {
         display:none !important;
     }
-    #search-results {
-        border-left: 1px solid #ccc;
-    }
-    #search {
-        color:rgba(255, 255, 255, 0.4);
-    }
-    #search ::placeholder {
-        color:rgba(255, 255, 255, 0.4);
-    }
-    #search input {
-        color:white;
-    }
     #actions .command-list button {
-        border-left:0.05em solid #ddd;
         border-right:0.25em solid transparent;
     }
     #breadcrumbs {
@@ -498,9 +490,6 @@ input.inverted:focus {
         position: absolute;
         left: 1em;
         font-size: 0.5em;
-    }
-    #breadcrumbs button {
-        color: #00d3a9;
     }
     #breadcrumbs li {
         padding-right:1em;
@@ -514,14 +503,11 @@ input.inverted:focus {
         line-height: 2em;
         font-size: 1.4em;
         right: 0;
-        color: #ccc;
     }
     #breadcrumbs button:hover, #breadcrumbs button:hover i {
-        color: #00d3a9;
         text-decoration: underline;
     }
     #breadcrumbs li:last-child button {
-        color:#888;
         pointer-events: none;
     }
 }
