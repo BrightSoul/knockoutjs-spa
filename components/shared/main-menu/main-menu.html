@@ -1,3 +1,4 @@
+<div id="main-menu-container">
 <ul id="tenant-command" class="command-list">
     <li><button type="button"><img src="/assets/images/tenant.png" /><span>Tenant name</span></button></li>
 </ul>
@@ -12,12 +13,21 @@
 <ul class="command-list">
     <li data-bind="click: logout"><button type="button"><i class="fa fa-power-off"></i> Logout</button></li>
 </ul>
+</div>
 
 <footer id="main-menu-footer">
     <img src="/assets/images/logo.svg" />
 </footer>
 
 <style>
+    #main-menu-container {
+        position:absolute;
+        top:0;
+        right:0;
+        bottom:3em;
+        left:0;
+        overflow:auto;
+    }
     #main-menu-footer {
         position: absolute;
         bottom:0;
@@ -26,6 +36,7 @@
         padding:0.5em;
         text-align: center;
         box-sizing: border-box;
+        pointer-events: none;
     }
     #main-menu-footer img {
         max-width: 60%;

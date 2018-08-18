@@ -180,13 +180,12 @@ p {
 #menu {
     font-size:1em;
     position:absolute;
-    top:0;
+    top:2.8em;
     opacity:0;
     height:100%;
     width:12em;
     left:-12em;
     max-width:80%;
-    padding-top:2.8em;
     box-sizing:border-box;
     transition: opacity 0.2s, left 0.3s;
     box-shadow: 2px 0 2px rgba(0,0,0,0.2);
@@ -434,7 +433,7 @@ button.secondary {
 /* Response stuff with media queries */
 @media screen and (min-width:768px) {
     #menu {
-        padding-top:0;
+        top:0;
         left:0;
         opacity:1;
         pointer-events: all;
@@ -452,6 +451,7 @@ button.secondary {
         pointer-events: all;
         opacity: 1;
         width: auto;
+        height: 2.8em;
     }
     #actions ul {
         float:right;
