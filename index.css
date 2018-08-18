@@ -32,6 +32,7 @@ input.inverted:focus { border-color:rgba(255, 255, 255, 0.8); }
 .field label.inverted { color:rgba(255, 255, 255, 0.6); }
 .field label { color:rgba(0, 0, 0, 0.8); }
 #actions .command-list button:hover { background-color: white; }
+#pull-to-refresh-container > i { color: #00d3a9; }
 
 @media screen and (min-width:768px) {
     #search-results { border-left-color: #ccc; }
@@ -47,6 +48,7 @@ input.inverted:focus { border-color:rgba(255, 255, 255, 0.8); }
     #breadcrumbs li:not(:last-child)::after { color: #ccc; }
     #breadcrumbs button:hover, #breadcrumbs button:hover i { color: #00d3a9; }
     #breadcrumbs li:last-child button { color:#888; }
+
 }
 
 
@@ -340,8 +342,6 @@ button {
     border-right: 0 solid transparent !important;
 }
 
-#actions .command-list button { box-shadow: -1px 0 0 rgba(0,0,0,0.05); }
-
 @keyframes ripple {
     0% {
       transform: scale(0, 0);
@@ -509,4 +509,5 @@ button.secondary {
     #breadcrumbs li:last-child button {
         pointer-events: none;
     }
+    #actions .command-list button { box-shadow: -1px 0 0 rgba(0,0,0,0.05); }
 }

@@ -1,4 +1,4 @@
-define(['vendor/knockout', 'services/singleton', 'services/storage'], function(ko, singleton, storage) {
+define(['services/vendor/knockout', 'services/singleton', 'services/storage'], function(ko, singleton, storage) {
     var _user = ko.observable(storage.load("user"));
 
     function UserIdentity() {

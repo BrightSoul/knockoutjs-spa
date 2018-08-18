@@ -1,4 +1,4 @@
-define(['vendor/knockout', 'services/bus'], function(ko, bus) {
+define(['services/vendor/knockout', 'services/bus'], function(ko, bus) {
 
     var defaultTitle = { data: null, nodes: [] };
 

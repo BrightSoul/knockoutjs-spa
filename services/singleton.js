@@ -1,4 +1,4 @@
-define(['vendor/knockout'], function(ko) {
+define(['services/vendor/knockout'], function(ko) {
     function Singleton() {
     }
     Singleton.prototype.create = function(func) {

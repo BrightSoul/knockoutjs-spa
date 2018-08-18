@@ -1,4 +1,4 @@
-define(['vendor/knockout', 'services/navigator'], function(ko, navigator) {
+define(['services/vendor/knockout', 'services/navigator'], function(ko, navigator) {
 
     return function CustomerListViewModel(params) {
         this.title = "Customers";

@@ -1,4 +1,4 @@
-define(['vendor/knockout', 'services/identity'], function(ko, identity) {
+define(['services/vendor/knockout', 'services/identity'], function(ko, identity) {
 
     return function LoginViewModel() {
         this.password = ko.observable("");

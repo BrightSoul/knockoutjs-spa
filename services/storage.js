@@ -1,4 +1,4 @@
-define(['vendor/knockout'], function(ko) {
+define(['services/vendor/knockout'], function(ko) {
     function ClientSideStorage() {
     }
     ClientSideStorage.prototype.save = function(key, object) {

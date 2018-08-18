@@ -18,6 +18,7 @@
         "page-title-container": "shared/page-title/page-title-container", 
         "page-title": "shared/page-title/page-title",
         "breadcrumbs": "shared/breadcrumbs/breadcrumbs",
+        "pull-to-refresh": "shared/pull-to-refresh/pull-to-refresh",
         "not-found": "shared/not-found/not-found"
     },
     "routes": {
@@ -29,5 +30,6 @@
         },
         "notFound": "not-found",
         "default": "home"
-    }
+    },
+    "localizations": ["it", "en"]
 }

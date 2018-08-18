@@ -1,4 +1,4 @@
-define(['vendor/knockout'], function(ko, navigator) {
+define(['services/vendor/knockout'], function(ko, navigator) {
 
     return function ProductInfoViewModel() {
         

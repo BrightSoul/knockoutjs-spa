@@ -1,4 +1,4 @@
-define(['vendor/knockout', 'services/navigator', 'services/bus'], function(ko, navigator, bus) {
+define(['services/vendor/knockout', 'services/navigator', 'services/bus'], function(ko, navigator, bus) {
 
     return function SearchBoxViewModel(params) {
         this.resultsShown = ko.observable(false);

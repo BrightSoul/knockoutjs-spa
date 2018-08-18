@@ -1,4 +1,4 @@
-define(['vendor/knockout', 'services/bus'], function(ko, bus) {
+define(['services/vendor/knockout', 'services/bus'], function(ko, bus) {
 
     function PageTitleViewModel(params, parentComponentViewModel, parentComponentParams, nodes) {
         this.params = params;

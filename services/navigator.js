@@ -1,4 +1,4 @@
-define(['vendor/knockout', 'vendor/route', 'services/singleton', 'services/bus'], function(ko, router, singleton, bus) {
+define(['services/vendor/knockout', 'services/vendor/route', 'services/singleton', 'services/bus'], function(ko, router, singleton, bus) {
     
     var _routes = {};
     var _currentComponent = ko.observable(null);

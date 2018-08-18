@@ -1,4 +1,4 @@
-define(['vendor/knockout', 'services/singleton'], function(ko, singleton) {
+define(['services/vendor/knockout', 'services/singleton'], function(ko, singleton) {
 
     var subscriptions = {};
 

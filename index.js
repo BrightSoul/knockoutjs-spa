@@ -1,4 +1,4 @@
-require(['vendor/knockout', 'services/identity', 'services/navigator', 'services/bus'], function (ko, identity, navigator, bus) {
+require(['services/vendor/knockout', 'services/identity', 'services/navigator', 'services/bus'], function (ko, identity, navigator, bus) {
     function IndexViewModel() {
         this.identity = identity;
         this.navigator = navigator;
@@ -85,7 +85,7 @@ require(['vendor/knockout', 'services/identity', 'services/navigator', 'services
             var suffix = "?v=" + Math.random().toString();
             ko.components.register(component, {
                 viewModel: { require: 'components/' + path + '.js' + suffix },
-                template: { require: 'vendor/text!components/' + path + '.html' + suffix }
+                template: { require: 'services/vendor/text!components/' + path + '.html' + suffix }
             });
         }
     }

@@ -1,4 +1,4 @@
-define(['vendor/knockout', 'services/navigator', 'services/bus'], function(ko, navigator, bus) {
+define(['services/vendor/knockout', 'services/navigator', 'services/bus'], function(ko, navigator, bus) {
 
     function ProductsViewModel(params) {
         var update = handleUpdates.bind(this);

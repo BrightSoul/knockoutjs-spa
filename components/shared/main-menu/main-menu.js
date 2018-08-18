@@ -1,4 +1,4 @@
-define(['vendor/knockout', 'services/identity', 'services/navigator'], function(ko, identity, navigator) {
+define(['services/vendor/knockout', 'services/identity', 'services/navigator'], function(ko, identity, navigator) {
     return function MainMenuViewModel() {
         this.menu = ['home', 'customerList', 'products', 'status'];
         this.password = ko.observable("");
