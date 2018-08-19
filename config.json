@@ -31,5 +31,5 @@
         "notFound": "not-found",
         "default": "home"
     },
-    "localizations": ["it", "en"]
+    "locales": ["it", "en"]
 }

@@ -1,6 +1,6 @@
 <input type="text" id="search-box" placeholder="Cerca..." data-bind="value: query, valueUpdate: 'keyup', hasFocus: hasFocus" />
 <i class="fa fa-search" id="search-box-icon"></i>
-<button id="close-search-box" type="button" data-bind="click: closeSearch"><i class="fa fa-times"></i></button>
+<button id="close-search-box" type="button" data-bind="click: closeSearch"><i class="fa fa-arrow-left"></i></button>
 <ul id="search-results" class="command-list" data-bind="foreach: results, visible: hasResults">
     <li><button type="button" data-bind="click: $parent.selectResult"><span data-bind="text: text"></span></button><i class="fa fa-angle-right"></i></li>
 </ul>
@@ -24,14 +24,13 @@
         height:2em;
         width:2em;
         text-align: center;
-        display:block;
         pointer-events: none;
         font-size: 1.4em;
         line-height:2em;
     }
     #close-search-box {
         position:absolute;
-        right:0;
+        left:0;
         top:0;
         font-size: 1.4em;
         height:2em;

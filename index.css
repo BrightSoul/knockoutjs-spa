@@ -179,20 +179,23 @@ p {
 #search-results, #navbar, #actions {
     box-shadow: 0 1px 2px rgba(0,0,0,0.2);
 }
+#search-box-icon { display: none; }
+
 #menu {
     font-size:1em;
     position:absolute;
     top:2.8em;
     opacity:0;
-    height:100%;
-    width:12em;
-    left:-12em;
+    width:16em;
+    left:-16em;
+    bottom:0;
     max-width:80%;
     box-sizing:border-box;
     transition: opacity 0.2s, left 0.3s;
     box-shadow: 2px 0 2px rgba(0,0,0,0.2);
     z-index: 101;
     pointer-events: none;
+    overflow-y:auto;
 }
 
 #menu.open {
@@ -240,11 +243,6 @@ p {
     z-index:100;
     pointer-events: all;
 }
-/*
-#tenant-command, #profile-command {
-    background-color:rgba(255, 255, 255, 0.05);
-}*/
-
 
 #login {
     position:absolute;
@@ -326,7 +324,7 @@ button {
     border-left-width: 0;
     border-left-style: solid;
     border-right: 0.3em solid transparent;
-    padding:0.8em;
+    padding: 0.8em;
     width:100%;
     text-align: left;
     transition: border 0.2s;
@@ -428,6 +426,7 @@ button.secondary {
     top:-1em;
 }
 
+
 ::-ms-clear { display:none; }
 
 /* Response stuff with media queries */
@@ -439,7 +438,7 @@ button.secondary {
         pointer-events: all;
     }
     #navbar, #nav-stack>li, #actions, #actions.open {
-        left: 12em;
+        left: 16em;
     }
     #nav-stack>li {
         top: 2.8em;
@@ -510,4 +509,5 @@ button.secondary {
         pointer-events: none;
     }
     #actions .command-list button { box-shadow: -1px 0 0 rgba(0,0,0,0.05); }
+    #search-box-icon { display: block; }
 }

@@ -1,5 +1,9 @@
-require(['services/vendor/knockout', 'services/identity', 'services/navigator', 'services/bus'], function (ko, identity, navigator, bus) {
-    function IndexViewModel() {
+require(['services/vendor/knockout', 'services/identity', 'services/navigator', 'services/bus', 'services/bindings', 'services/localization'], function (ko, identity, navigator, bus, bindings, localization) {
+    bindings.registerCustomBindings();
+    
+    function IndexViewModel(config) {
+        localization.init(config.locales);
+        
         this.identity = identity;
         this.navigator = navigator;
         this.menuOpen = ko.observable(false);
@@ -98,14 +102,9 @@ require(['services/vendor/knockout', 'services/identity', 'services/navigator', 
         nav.route404(routes.notFound).start(routes.default);
     }
 
-    function bindViewModel() {
-        configureCustomBindings();
-        var vm = new IndexViewModel();
+    function bindViewModel(config) {
+        var vm = new IndexViewModel(config);
         ko.applyBindings(vm);
-    }
-
-    function configureCustomBindings() {
-        //TODO:
     }
 
     loadConfiguration()
@@ -113,6 +112,6 @@ require(['services/vendor/knockout', 'services/identity', 'services/navigator', 
     .then(function(config) {
         configureComponents(config.components);
         configureRoutes(config.routes);
-        bindViewModel();
+        bindViewModel(config);
     });
 });
